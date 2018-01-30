@@ -62,10 +62,10 @@ def Crystal(a, Nx, Ny):
     # Convert coordinate list to array and plot atomic positions
     coord = np.array(coord)
     xpoint,ypoint = coord.T
-    plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.5')
+    plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.2')
     return x, y, coord
 
-def Psi(s, sigma, kx, ky, coord, Nx, Ny):
+def Psi(s, sigma, kx, ky, coord, Nx, Ny, plot=False):
     """
     ===========================================================================
     Creation of a 2D Gaussian wavepacket centered at the origin
@@ -99,13 +99,15 @@ def Psi(s, sigma, kx, ky, coord, Nx, Ny):
     # Normalise the wavefunction
     # A = scipy.integrate.simps(scipy.integrate.simps(Psi))
     # Psi = Psi/sqrt(A)
+    Psi = Psi / np.sqrt(np.pi/s)
 
-    # Plot the absolute square of the wavefunction
-    n = np.array(np.abs(Psi)**2)
-    n = np.reshape(n,(Ny,Nx))
+    if plot:
+        # Plot the absolute square of the wavefunction
+        n = np.array(np.abs(Psi)**2)
+        n = np.reshape(n,(Ny,Nx))
+        plt.contourf(coord[0],coord[1],n)
+        plt.savefig('Gaussian on Graphene')
 
-    plt.contourf(coord[0],coord[1],n)
-    plt.savefig('Gaussian on Graphene')
     return np.array(Psi)
 
 if __name__ == "__main__":
