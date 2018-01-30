@@ -7,6 +7,7 @@ from scipy import constants
 from scipy import sparse
 import scipy.linalg
 from DD_TBH import TBH
+from wavepacket import *
 
 #import scipy.fftpack ... this might be a little awkward
 
@@ -28,10 +29,12 @@ def TB_solver(dt,DT):
     TH1P = H[0]
     TH1N = H[1]
     TH2P = H[2]
-    TH2N = H[3]    
+    TH2N = H[3]
     #should call the wavefunction ...
     #need to specify how it is constructed so we can make the tridagonly matrices
-    wvf = np.ones((N,1))#wavefunction ... just put some matrix there for now ...
+    a = 1.42*10**(-10)
+    points = wavepacket.Crystal(a, 10, 10)
+    wvf = wavepacket.Psi(s=a, 0, kx = 1/a, ky = 1/a, points, 10, 10)#wavefunction ... just put some matrix there for now ...
 
     #import from TBH
 
@@ -40,7 +43,7 @@ def TB_solver(dt,DT):
     for i in range(Ns):
 
         #matrix multiply the wavefunctino by the + version of the first tri diagonal
-        
+
 
         #https://stackoverflow.com/questions/44388358/python-numpy-matrix-multiplication-with-one-diagonal-matrix
         #c = (a*b.T).T ... fastest way and we have it in this form ...
@@ -48,32 +51,32 @@ def TB_solver(dt,DT):
         #solve the linear equation with the - version of the first tri diagonal and
         #the vector just calcualted
 #       NX1 matrix
-        
-        
-        
+
+
+
         hnm = sparse.csr_matrix.dot(TH1N,wvf)
-        A1 = scipy.linalg.solve_banded((1,1), TH1P, hnm) 
+        A1 = scipy.linalg.solve_banded((1,1), TH1P, hnm)
         Anm = A1.reshape((n,m))
         A2 = Anm.reshape((N,1))
-        
+
         f=sparse.csr_matrix.dot(TH2N,A2)
-        B = scipy.linalg.solve_banded((1,1), TH2P, f) 
+        B = scipy.linalg.solve_banded((1,1), TH2P, f)
         Bnm = B.reshape((m,n))
         B2 = Bnm.reshape((N,1))
-        
-        
+
+
         g = sparse.csr_matrix.dot(TH1N,B2)
-        wvf = scipy.linalg.solve_banded((1,1), TH1P, g) 
+        wvf = scipy.linalg.solve_banded((1,1), TH1P, g)
 #    Calculation of Conjugate wave function
     wvf_conj=np.conjugate(wvf)
 
 #   Probability density function by element wise multiplication
     pd = np.multiply(wvf_conj,wvf)
-    
-    
-    
-    
-    
+
+
+
+
+
 #contour plot
 def figsize(scale):
     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
@@ -174,7 +177,7 @@ def visualize(Nx=50,Ny=50,yl=-2,xl=-2,yu=2,xu=2,noise=False,na = 0,display=True)
 #End of plotting stuff
 
 
- 
+
         #Now we need to shift the result around such that another tri diagonal
         #matrix equation can be solved
         #might be able to do this with the range thing from above ...

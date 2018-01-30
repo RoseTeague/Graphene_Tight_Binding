@@ -65,7 +65,7 @@ def Crystal(a, Nx, Ny):
     plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.2')
     return x, y, coord
 
-def Psi(s, sigma, kx, ky, coord, Nx, Ny, plot=False):
+def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
     """
     ===========================================================================
     Creation of a 2D Gaussian wavepacket centered at the origin
@@ -81,14 +81,14 @@ def Psi(s, sigma, kx, ky, coord, Nx, Ny, plot=False):
         wavenumbers along x and y directions
     coord : array
         List of atomic locations (x,y)
-    Nx  : Number of atoms along x
-    Ny  : Number of atoms along y
+    m  : Number of atoms along x
+    n  : Number of atoms along y
 
 
     Returns
     -----------
     Psi : ndarray, complex
-    A Nx x Ny matrix, with the value of the wavefunction defined at each point
+    A m x n matrix, with the value of the wavefunction defined at each point
     """
 
     # Calculate value of Gaussian at each atomic location
@@ -103,9 +103,9 @@ def Psi(s, sigma, kx, ky, coord, Nx, Ny, plot=False):
 
     if plot:
         # Plot the absolute square of the wavefunction
-        n = np.array(np.abs(Psi)**2)
-        n = np.reshape(n,(Ny,Nx))
-        plt.contourf(coord[0],coord[1],n)
+        psi2 = np.array(np.abs(Psi)**2)
+        psi2 = np.reshape(psi2,(n,m))
+        plt.contourf(coord[0],coord[1],psi2)
         plt.savefig('Gaussian on Graphene')
 
     return np.array(Psi)
