@@ -74,13 +74,16 @@ def Psi(s, sigma, kx, ky, coord, Nx, Ny):
     Parameters
     -----------
     s : float
-    Width of gaussian Wavepacket
+        Width of gaussian Wavepacket
     sigma : float
-    Phase of guassian Wavepacket
+        Phase of guassian Wavepacket
     kx, ky : float
-    wavenumbers along x and y directions
+        wavenumbers along x and y directions
     coord : array
-    List of atomic locations (x,y)
+        List of atomic locations (x,y)
+    Nx  : Number of atoms along x
+    Ny  : Number of atoms along y
+
 
     Returns
     -----------
@@ -102,9 +105,10 @@ def Psi(s, sigma, kx, ky, coord, Nx, Ny):
     n = np.reshape(n,(Ny,Nx))
 
     plt.contourf(coord[0],coord[1],n)
-    plt.show()
+    plt.savefig('Gaussian on Graphene')
+    return np.array(Psi)
 
 if __name__ == "__main__":
     a = 1.42*10**(-10)
-    points = Crystal(a, 100, 100)
-    Psi(10*a, 0, 50/a, 50/a, points, 100, 100)
+    points = Crystal(a, 500, 500)
+    Psi(50*a, 0, 50/a, 50/a, points, 500, 500)
