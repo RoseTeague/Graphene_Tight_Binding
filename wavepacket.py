@@ -62,7 +62,7 @@ def Crystal(a, Nx, Ny):
     # Convert coordinate list to array and plot atomic positions
     coord = np.array(coord)
     xpoint,ypoint = coord.T
-    plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.2')
+    #plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.2')
     return x, y, coord
 
 def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
@@ -100,13 +100,14 @@ def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
     # A = scipy.integrate.simps(scipy.integrate.simps(Psi))
     # Psi = Psi/sqrt(A)
     Psi = Psi / np.sqrt(np.pi/s)
+    Psi = np.reshape(Psi, (n*m,1))
 
-    if plot:
+    #if plot:
         # Plot the absolute square of the wavefunction
-        psi2 = np.array(np.abs(Psi)**2)
-        psi2 = np.reshape(psi2,(n,m))
-        plt.contourf(coord[0],coord[1],psi2)
-        plt.savefig('Gaussian on Graphene')
+        # psi2 = np.array(np.abs(Psi)**2)
+        # psi2 = np.reshape(psi2,(n,m))
+        # plt.contourf(coord[0],coord[1],psi2)
+        # plt.savefig('Gaussian on Graphene')
 
     return np.array(Psi)
 
