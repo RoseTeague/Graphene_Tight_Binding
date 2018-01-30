@@ -17,12 +17,13 @@ from wavepacket import *
 #in the function header we need to have the timestep and duration of simulation specified
 
 def TB_solver(dt,DT):
+#    plt.close()
     #add doc string here
 
     #need to add some assert statements ...
 
     #probably want to have a file with all of the details ...
-    Ns = 10#DT/dt #need to then round this off to the nearest integer ...
+    Ns = 50#DT/dt #need to then round this off to the nearest integer ...
     n = 100
     m = 100
     N = n*m
@@ -36,15 +37,22 @@ def TB_solver(dt,DT):
     #need to specify how it is constructed so we can make the tridagonly matrices
     a = 1.42*10**(-10)
     points = Crystal(a, m, n)
-    wvf = Psi(10*a, 0, 10/a, 10/a, points, m, n)  #wavefunction ... just put some matrix there for now ...
+    wvf = Psi(10*a, 0, 1/a, 1/a, points, m, n)  #wavefunction ... just put some matrix there for now ...
 
+    #wvf_conj=np.conjugate(wvf)
+    #pd = np.multiply(wvf_conj,wvf)
+    #pd = np.reshape(pd,(n,m))
+
+
+    #plt.contourf(points[0],points[1],pd)
+    #plt.show()
     #import from TBH
 
     #then need to call the hamiltonian ...
 
-    hnm = np.zeros((N,1))
-    f = np.zeros((N,1))
-    g = np.zeros((N,1))
+    hnm = np.zeros((N,1),dtype=complex)
+    f = np.zeros((N,1),dtype=complex)
+    g = np.zeros((N,1),dtype=complex)
 
     for i in range(Ns):
 
