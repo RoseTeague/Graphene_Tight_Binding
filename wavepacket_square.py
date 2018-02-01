@@ -45,6 +45,11 @@ def Crystal(a, Nx, Ny):
     y = np.arange(ymin,ymax,deltay)
 
     # Rewrite atomic positions as a list of coordinates
+
+    ###
+    #Could this be written in vector form ... ?
+    ###
+
     coord=[]
     for j in y:
         for i in x:
@@ -83,6 +88,11 @@ def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
     """
 
     # Calculate value of Gaussian at each atomic location
+
+    ###
+    #Could this be written in vector form ... ?
+    ###
+
     Psi = []
     for i in coord[2]:
         Psi.append(np.exp(-0.5*((i[0]/s)**2+(i[1]/s)**2))*np.exp((kx*i[0]+ky*i[1])*1j))

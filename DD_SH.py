@@ -5,7 +5,7 @@ import numpy as np
 from scipy import constants
 
 def TBH(n=10,m=10,dt=0.1e-15,V=False):
-    """Function that creates Hamiltonians of graphene for the split operator
+    """Function that creates Hamiltonians of square lattice for the split operator
     technique. The number of rows and columns is all that is required to
     construct the matrices. These matrices are prepared in tridiagonal form
     for efficient calculations in the split operator technique.
@@ -50,9 +50,11 @@ def TBH(n=10,m=10,dt=0.1e-15,V=False):
 
     #Hopping integral in eV puts matrix elements in with sensible numbers
     HI = -2.7
+
     H_1 = HI*1j*constants.e*dt*0.25/constants.hbar
     H_2 = HI*1j*constants.e*dt*0.5/constants.hbar
-    H_V = 1j*constants.e*dt*0.5/constants.hbar
+
+    H_V = 1j*constants.e*dt*0.25/constants.hbar#need to check this ...
 
     #Constructing the set of tridiagonal matrices for H_m
     TH1P = np.zeros((3,N),dtype=complex)
@@ -93,12 +95,12 @@ def TBH(n=10,m=10,dt=0.1e-15,V=False):
     TH2N[1] = 1
 
     #Setting off-diagonal elements of m matrix
-    TH2P[0] = H_1
-    TH2N[0] = -H_1
-    TH2P[2] = H_1
-    TH2N[2] = -H_1
+    TH2P[0] = H_2
+    TH2N[0] = -H_2
+    TH2P[2] = H_2
+    TH2N[2] = -H_2
 
-    TH2P[0,0:N-n-1:n] = 0
+    TH2P[0,0:N-n-1:n] = 0#these should be in terms of m ...
     TH2N[0,0:N-n-1:n] = 0
     TH2P[2,n-1:N-1:n] = 0
     TH2N[2,n-1:N-1:n] = 0
