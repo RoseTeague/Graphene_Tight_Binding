@@ -26,7 +26,7 @@ def Crystal(m=20, n=10):
 
     a = 1.42#working in angstroms
 
-    #might be able to ignore these ... as in we could write them as one ... 
+    #might be able to ignore these ... as in we could write them as one ...
     d_x = a*0.5
     d_y = 0.5*a*np.sqrt(3)
 
@@ -34,18 +34,26 @@ def Crystal(m=20, n=10):
     X = np.zeros((m,n))
     Y = np.zeros((n,m))
 
+    #this probably can not deal with rectangular lattices ...
+    #can this be done in a more efficient way? Porbably ...
     y_1 = np.arange(n)
-    Y[:,] = - d_y*y_1.T
+    y_1 = y_1.reshape((n,1))
+    Y[:,0:m] = - a*y_1
     Y = Y.reshape((n*m,1))
+    Y_mn = Y.reshape((n,m))
+    Y_T = Y_mn.T
+    Y = Y_T.reshape((n*m,1))
 
     x_1 = np.arange(m)
-    dx = np.zeros((1,m))
-    dx[0,0:m:2] = d_x*0.5
-    dx[0,1:m:2] = -d_x*0.5
+    x_1 = x_1.reshape((m,1))
+    dx = np.zeros((1,n))
+    dx[0,0:n:2] = d_x*0.5
+    dx[0,1:n:2] = -d_x*0.5
     X[:,] = (d_x + a)*x_1
     X[0:m:2,:] = X[0:m:2,:] + dx
     X[1:m:2,:] = X[1:m:2,:] - dx
-    X = X.T.reshape((n*m,1))
+
+    X = X.reshape((n*m,1))
 
     X_0 = 0.5*m*(d_x + a)
     Y_0 = -0.5*n*d_y
@@ -83,10 +91,10 @@ def Psi(s, kx, ky, m, n):
     # Calculate value of Gaussian at each atomic location
     Psi = np.zeros((n*m,1),dtype=complex)
 
-    Psi = (np.exp(-0.5*(((X - X_0)/s)**2 + ((Y - Y_0)/s)**2))*np.exp((kx*X+ky*Y)*1j))/np.sqrt(np.pi*s)
+    Psi = (np.exp(-0.5*(((X - X_0)/s)**2 + ((Y - Y_0)/s)**2))*np.exp((kx*X + ky*Y)*1j))/np.sqrt(2*np.pi*s)
 
     return Psi
 
 if __name__ == "__main__":
-    Crystal(m=10, n=10)
+    Crystal(m=10, n=5)
     #Psi(10, 1/10, 1/10, 100, 100)
