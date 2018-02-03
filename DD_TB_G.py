@@ -3,12 +3,51 @@
 import math #can not remeber if this is how we do this ...
 import numpy as np
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 from scipy import constants
 from scipy import sparse
 import scipy.linalg
 from DD_GH import TBH
 import DD_WP_G
 from DD_WP_G import *
+
+#Defining the plotting stuff ... this was taken from the following websites. It just puts figures in a nice LaTeX format.
+
+#http://bkanuka.com/articles/native-latex-plots/
+#http://sbillaudelle.de/2015/02/23/seamlessly-embedding-matplotlib-output-into-latex.html
+
+# #contour plot
+# def figsize(scale):
+#     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
+#     inches_per_pt = 1.0/72.27                       # Convert pt to inch
+#     golden_mean = (np.sqrt(5.0)-1)/2.0            # Aesthetic ratio (you could change this)
+#     fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
+#     fig_height = fig_width*golden_mean              # height in inches
+#     fig_size = [fig_width,fig_height]
+#     return fig_size
+#
+# pgf_with_latex = {                      # setup matplotlib to use latex for output
+#     "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+#     "text.usetex": True,                # use LaTeX to write all text
+#     "font.family": "serif",
+#     "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+#     "font.sans-serif": [],
+#     "font.monospace": [],
+#     "axes.labelsize": 10,               # LaTeX default is 10pt font.
+#     "text.fontsize": 10,
+#     "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+#     "xtick.labelsize": 8,
+#     "ytick.labelsize": 8,
+#     "figure.figsize": figsize(1),     # default fig size of 0.9 textwidth
+#     "pgf.preamble": [
+#         r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+#         r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+#         ]
+#     }
+# mpl.rcParams.update(pgf_with_latex)
+
+#End of plotting stuff
+
 
 #in the function header we need to have the timestep and duration of simulation specified
 
@@ -21,15 +60,25 @@ def TB_solver():
     #need to add some assert statements ...
 
     #probably want to have a file with all of the details ...
-    Ns = 300#DT/dt #need to then round this off to the nearest integer ...
+    Ns = 10#DT/dt #need to then round this off to the nearest integer ...
     #might need to do up to 1000 iterations ...
     #should be able to do this with 400 iteraions tops ...
-    n = 500
-    m = 500
+    n = 4000
+    m = 4000
     N = n*m
 
+    l_c = 200#this is probably too short ...
+
+    #correlation length should be 20 nm ...
+    points = Crystal(m, n)
+    wvf = Psi(4*l_c, math.pi/(5*l_c), math.pi/(5*l_c), m, n)#wavefunction ... just put some matrix there for now ...
+    #math.pi/(5*l_c)
+    #the wavevector should be like 0.07 ish ... in total ..
+
+    #the value in the Gaussian must be much less than this!
+
     #Importing hamiltonain from module
-    H = TBH(n,m,dt=0.1e-15,V=False)
+    H = TBH(n,m,dt=0.1e-15,V=True)
     TH1P = H[0]
     TH1N = H[1]
     TH2P = H[2]
@@ -46,11 +95,6 @@ def TB_solver():
     TH2N2 = TH2N[2,0:N-2].reshape((N-2,1))
 
     #need to specify how it is constructed so we can make the tridagonly matrices
-
-    l_c = 3#this is probably too short ...
-    points = Crystal(m, n)
-    wvf = Psi(5*l_c, math.pi/(5*l_c), math.pi/(5*l_c), m, n)  #wavefunction ... just put some matrix there for now ...
-    #the value in the Gaussian must be much less than this!
 
     #Empty vectors for populating
     psi_p = np.zeros((N,1),dtype=complex)
@@ -114,7 +158,7 @@ def TB_solver():
     pd = np.reshape(pd,(n,m))
 
     #Plotting
-    plt.contourf(points[0].reshape((n,m)),points[1].reshape((n,m)),pd,cmap='RdGy')
+    plt.contourf(points[0].reshape((n,m)),points[1].reshape((n,m)),pd)#,cmap='RdGy'
     plt.show()
 
 #     #plotting
