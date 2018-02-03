@@ -5,55 +5,65 @@ import numpy as np
 
 def Crystal(m, n):
     """
-    ===============================================================================
-    Function to define the crystal sample for graphene
-    ===============================================================================
+    ============================================================================
+    Function to create a square/rectangular crystal
+    ============================================================================
+
+    Inputs
+    -----------
+    m : integer
+        Number of atoms along the x-direction
+
+    n : integer
+        Numver of atoms along the y-direction
 
     Parameters
     -----------
     a : float
-        Lattice size parameter
-    Nx : integer
-        Number of atoms along the x-direction
-    Ny : integer
-        Numver of atoms along the y-direction
+        Lattice size parameter of graphene
 
     Returns
     ----------
-    coord : array
-        list of atomic locations (x,y)
+    X,
+    Y,
+    X_0,
+    Y_0
+
     """
 
-    #Define the general square/rectangular lattice
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
 
-    #Parameters
+    #Lattice parameters in the y and x direction, respectively.
     a = 1.42
     b = 1.42
 
+    #Creating initial arrays for populating the x and y values of each carbon atom.
     X = np.zeros((m,n))
     Y = np.zeros((n,m))
 
+    #Creating a list from 0 to n for each atom in a column. This is reshaped
+    #such that further operations can be performed.
     y_1 = np.arange(n)
     y_1 = y_1.reshape((n,1))
+
+    #Each column has regularly spaced atoms.
     Y[:,0:m] = - a*y_1
-    Y = Y.reshape((n*m,1))
-    Y_mn = Y.reshape((n,m))
-    Y_T = Y_mn.T
+
+    #Reshaping for further calculations
+    Y_T = Y.T
     Y = Y_T.reshape((n*m,1))
 
-    #print(Y)
-
+    #Creating a list from 0 to n for each atom in a column. This is reshaped
+    #such that further operations can be performed.
     x_1 = np.arange(m)
     x_1 = x_1.reshape((m,1))
     X[:,] = - b*x_1
+
+    #Reshaping for further calculations
     X = X.reshape((n*m,1))
 
-    #print(X)
-
-    #well no wonder it is the same ... I have not done anything differently ...
-    #It does not actually matter though ...
-    #It will when they are not symmetric though!
-
+    #Defining initial position of wave packet.
     X_0 = 0.5*m*b
     Y_0 = -0.5*n*a
 
@@ -63,10 +73,10 @@ def Crystal(m, n):
 def Psi(s, kx, ky, m, n):
     """
     ===========================================================================
-    Creation of a 2D Gaussian wavepacket centered at the origin
+    Creation of a 2D Gaussian wavepacket 
     ===========================================================================
 
-    Parameters
+    Inputs
     -----------
     s : float
         Width of gaussian Wavepacket
@@ -74,27 +84,33 @@ def Psi(s, kx, ky, m, n):
         Phase of guassian Wavepacket
     kx, ky : float
         wavenumbers along x and y directions
-    coord : array
-        List of atomic locations (x,y)
+
     m  : Number of atoms along x
     n  : Number of atoms along y
 
 
     Returns
     -----------
-    Psi : ndarray, complex
-    A m x n matrix, with the value of the wavefunction defined at each point
+    Psi : ndarray (mxn,1), complex
+        a matrix with the value of the wavefunction defined at each atom
+
     """
 
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    #also need to assert that the other numbers are real ...
+
+    #calling Crystal function to import all of the positions of atoms and
+    #the initial wave packet position
     X, Y, X_0, Y_0 = Crystal(m,n)
 
-    # Calculate value of Gaussian at each atomic location
-    Psi = np.zeros((n*m,1), dtype=complex)
+    #Defining and empty array of complex type for populating
+    Psi = np.zeros((n*m,1),dtype=complex)
 
-    Psi = (np.exp(-0.5*(((X - X_0)/s)**2 + ((Y - Y_0)/s)**2))*np.exp((kx*X+ky*Y)*1j))/np.sqrt(np.pi*s)
+    #Calculating normalised wave packet
+    Psi = (np.exp(-0.5*(((X - X_0)/s)**2 + ((Y - Y_0)/s)**2))*np.exp((kx*X + ky*Y)*1j))/np.sqrt(4*np.pi*s)
 
-    return np.array(Psi)
+    return Psi
 
 if __name__ == "__main__":
-    points = Crystal(5, 10)
-    #Psi(10*a, 0, 10/a, 10/a, points, 100, 100, plot = True)
+    points = Crystal(10, 10)
