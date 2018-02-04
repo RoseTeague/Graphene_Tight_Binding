@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Module for correlated Gaussian disorder potential on graphene
+Module for 1D correlated Gaussian disorder potential on graphene
 """
 
 import numpy as np
