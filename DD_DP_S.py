@@ -39,15 +39,29 @@ def oneDdisorderpotential(m,n,lc):
     x = X[0:n*m:n,0]
     
     #Create One-dimensional disorder potential
-    Delta = 0.3 #disorder magnitude
-    V=np.random.normal(0,1,m) #A vector containing spatially-uncorrelated Gaussian-random variables with zero mean and a variance of 1
-    X1=np.tile(x,(m,1)) #Expand the 1-D array of x coordinates to a m*m array. 
-    X2=X1.T #Transpose X1
-    C=Delta**2*np.exp(-abs(X1-X2)/lc) #The two-point spatial correlation matrix  
-    L=np.linalg.cholesky(C) #Cholesky decomposition of the correlation matrix 
-    W=np.dot(L,V) #Get the final random vector having desired two-point correlation matrix. 
-    Wfinal=W.reshape((m,1)) #Reshape the vector into a column for further calculations. 
-
+    
+    #disorder magnitude in the unit of eV
+    Delta = 0.3 
+    
+    #Generate a vector containing spatially-uncorrelated Gaussian-random variables 
+    V=np.random.normal(0,1,m)
+    
+    #Generate a two-point position matrix for further calculations
+    X1=np.tile(x,(m,1))  
+    X2=X1.T 
+    
+    #Generate a two-point spatial correlation matrix  
+    C=Delta**2*np.exp(-abs(X1-X2)/lc) 
+    
+    #Cholesky decomposition of the correlation matrix 
+    L=np.linalg.cholesky(C) 
+    
+    #Get the final random vector having desired two-point correlation matrix. 
+    W=np.dot(L,V) 
+    
+    #Reshape the vector into a column for further calculations. 
+    Wfinal=W.reshape((m,1)) 
+    
     return Wfinal
 
 if __name__ == "__main__":
