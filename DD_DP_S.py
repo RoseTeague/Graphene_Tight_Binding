@@ -8,7 +8,7 @@ import numpy as np
 import DD_WP_S
 from DD_WP_S import *
 
-def oneDdisorderpotential(m,n):
+def oneDdisorderpotential(m,n,lc):
     """
     ============================================================================
     Create one-dimensional disorder potentials on square/rectangular lattice
@@ -22,7 +22,7 @@ def oneDdisorderpotential(m,n):
     n : integer
         Number of atoms along the y-direction
 
-    lc : real number
+    lc : float
         correlation length
 
     Returns
@@ -31,20 +31,22 @@ def oneDdisorderpotential(m,n):
          The final potential at each x position
 
     """
-
+    #Get positions of all atoms
     points = Crystal(m, n)
 
+    #Get x coordinates of atoms in one row. 
     X = points[0]
     x = X[0:n*m:n,0]
-
-    Delta = 0.3
-    V=np.random.normal(0,1,m)
-    X1=np.tile(x,(m,1))
-    X2=X1.T
-    C=Delta**2*np.exp(-abs(X1-X2)/lc)
-    L=np.linalg.cholesky(C)
-    W=np.dot(L,V)
-    Wfinal=W.reshape((m,1))
+    
+    #Create One-dimensional disorder potential
+    Delta = 0.3 #disorder magnitude
+    V=np.random.normal(0,1,m) #A vector containing spatially-uncorrelated Gaussian-random variables with zero mean and a variance of 1
+    X1=np.tile(x,(m,1)) #Expand the 1-D array of x coordinates to a m*m array. 
+    X2=X1.T #Transpose X1
+    C=Delta**2*np.exp(-abs(X1-X2)/lc) #The two-point spatial correlation matrix  
+    L=np.linalg.cholesky(C) #Cholesky decomposition of the correlation matrix 
+    W=np.dot(L,V) #Get the final random vector having desired two-point correlation matrix. 
+    Wfinal=W.reshape((m,1)) #Reshape the vector into a column for further calculations. 
 
     return Wfinal
 
