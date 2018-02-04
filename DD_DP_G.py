@@ -46,7 +46,7 @@ def oneDdisorderpotential(m,n,lc):
     Delta = 0.3
 
     #Generating sample of random numbers of Guassian distribution. 
-    V = np.random.normal(0,1,m)
+    V = np.random.normal(0,1,2*m)
 
     #Generate the two-point matrix
     X1 = np.tile(x,(2*m,1))
