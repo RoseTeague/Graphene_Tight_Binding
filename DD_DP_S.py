@@ -31,10 +31,10 @@ def oneDdisorderpotential(m,n,lc):
          The final potential at each x position
 
     """
-    #Get positions of all atoms
+    #Calling Crystal to obtain the positions of all carbon atoms.
     points = Crystal(m, n)
 
-    #Get x coordinates of atoms in one row. 
+    #Exctracting each unique x position. 
     X = points[0]
     x = X[0:n*m:n,0]
     
