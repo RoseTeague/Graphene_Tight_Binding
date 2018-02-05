@@ -164,7 +164,7 @@ def TB_solver_2D(n, m, dt, DT):
     Ns = round(DT/dt)+1
 
 
-    wvf = Psi(5,1, 1, m,n)
+    wvf2D = Psi(5,1, 1, m,n)
 
     H  = TBH(n,m,dt=0.1e-15)
 
@@ -172,15 +172,17 @@ def TB_solver_2D(n, m, dt, DT):
 
     for i in range(Ns):
 
-        wvf = expm_multiply(H, wvf)
+        wvf2D = expm_multiply(H, wvf2D)
 
-    wvf_c = np.conjugate(wvf)
+    wvf_c = np.conjugate(wvf2D)
 
-    pd = np.multiply(wvf_c, wvf)
+    pd = np.multiply(wvf_c, wvf2D)
     pd = np.reshape(pd,(n,m))
 
     plt.contourf(points[0].reshape((n,m)),points[1].reshape((n,m)),pd)#,cmap='RdGy'
     plt.show()
+    
+    return wvf2D
 
 if __name__ == "__main__":
     #Crystal(5,5)
@@ -189,4 +191,5 @@ if __name__ == "__main__":
     m = 100
     dt=0.1e-15
     DT = 1e-15
-    TB_solver_2D(n,m,dt,DT)
+    wvf2=TB_solver_2D(n,m,dt,DT)
+    print(wvf2D)
