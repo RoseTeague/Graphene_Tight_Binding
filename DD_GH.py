@@ -3,9 +3,11 @@
 
 import numpy as np
 from scipy import constants
+from scipy import sparse
+import scipy.linalg
 from DD_DP_G import oneDdisorderpotential
 
-def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
+def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
     """Function that creates Hamiltonians of graphene for the split operator
     technique. The number of rows and columns is all that is required to
     construct the matrices. These matrices are prepared in tridiagonal form
@@ -45,6 +47,8 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
 
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
+    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns" 
 
     #Total number of carbon atoms
     N = n*m
@@ -67,7 +71,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
     if V:
 
         #call the potential function ...
-        #DP = oneDdisorderpotential(m,n,lc,pos)
+        DP = oneDdisorderpotential(m,n)
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
@@ -124,9 +128,6 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
     #Setting diagonal elements
     if V:
 
-        #call the potential function ...
-        #DP = oneDdisorderpotential(m,n,lc)
-
         ip = 0
         fp = m
 
@@ -159,61 +160,28 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
     #looping over each row
     #also need to add a satement in for if there are an odd or even number of rows ... ?
     #because the number of non-zero elements changes ...
-    if m % 2 == 0:
 
-        for i in range(n):
+    for i in range(n):
 
-            if i % 2 == 0:
+        if i % 2 == 0:
 
-                #Populate off-diagonal elements for odd rows
-                TH2P[0,ip:fp:2] = H_2
-                TH2N[0,ip:fp:2] = -H_2
-                TH2P[2,ip-1:fp-1:2] = H_2
-                TH2N[2,ip-1:fp-1:2] = -H_2
+            #Populate off-diagonal elements for odd rows
+            TH2P[0,ip:fp:2] = H_2
+            TH2N[0,ip:fp:2] = -H_2
+            TH2P[2,ip-1:fp-1:2] = H_2
+            TH2N[2,ip-1:fp-1:2] = -H_2
 
-            else:
+        else:
 
-                #Populate off-diagonal elements for even rows
-                TH2P[0,ip+1:fp-1:2] = H_2
-                TH2N[0,ip+1:fp-1:2] = -H_2
-                TH2P[2,ip:fp-1:2] = H_2
-                TH2N[2,ip:fp-1:2] = -H_2
+            #Populate off-diagonal elements for even rows
+            TH2P[0,ip+1:fp-1:2] = H_2
+            TH2N[0,ip+1:fp-1:2] = -H_2
+            TH2P[2,ip:fp-1:2] = H_2
+            TH2N[2,ip:fp-1:2] = -H_2
 
-            #Update initial and final points
-            ip += m
-            fp += m
-
-    else:
-
-        #Have not done this part yet ...
-        #only use even numbers for n and m
-
-        for i in range(n):
-
-            if i % 2 == 0:
-
-                #also need to add a satement in for if there are an odd or even number of rows ... ? because the number of non-zero elements changes ...
-
-                #Populate off-diagonal elements for odd rows
-                TH2P[0,ip:fp:2] = H_2
-                TH2N[0,ip:fp:2] = -H_2
-                TH2P[2,ip-1:fp-1:2] = H_2
-                TH2N[2,ip-1:fp-1:2] = -H_2
-
-            else:
-
-                #Populate off-diagonal elements for even rows
-                TH2P[0,ip+1:fp+1:2] = H_2
-                TH2N[0,ip+1:fp+1:2] = -H_2
-                TH2P[2,ip:fp:2] = H_2
-                TH2N[2,ip:fp:2] = -H_2
-
-            #Update initial and final points
-            ip += m + 1
-            fp += m + 1
-
-
-    #print(TH2P)
+        #Update initial and final points
+        ip += m
+        fp += m
 
     #also need to work out if we can do periodic boundary conditions ...
 
@@ -221,4 +189,4 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
     return TH1P, TH1N, TH2P, TH2N
 
 if __name__ == "__main__":
-    TBH(100,100,0.1e-15,1,True)
+    TBH(5,5,dt=0.1e-15,lc=10,V=True)
