@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from scipy import constants
 from scipy import sparse
 import scipy.linalg
-from DD_GH import TBH
+from DD_GH import *
 import DD_WP_G
 from DD_WP_G import *
 
@@ -51,7 +51,7 @@ from DD_WP_G import *
 
 #in the function header we need to have the timestep and duration of simulation specified
 
-def TB_solver():
+def TB_solver(n,m,pos, wvf, DP, H, T, dt, video=False):
     """Split operator technique for propogation of wave packets with square
         lattice tight-binding hamiltonian.
 
@@ -60,25 +60,18 @@ def TB_solver():
     #need to add some assert statements ...
 
     #probably want to have a file with all of the details ...
-    Ns = 10#DT/dt #need to then round this off to the nearest integer ...
+    Ns = int(T/dt)#DT/dt #need to then round this off to the nearest integer ...
     #might need to do up to 1000 iterations ...
     #should be able to do this with 400 iteraions tops ...
-    n = 4000
-    m = 4000
+
     N = n*m
 
-    l_c = 200#this is probably too short ...
 
     #correlation length should be 20 nm ...
-    points = Crystal(m, n)
-    wvf = Psi(4*l_c, math.pi/(5*l_c), math.pi/(5*l_c), m, n)#wavefunction ... just put some matrix there for now ...
-    #math.pi/(5*l_c)
     #the wavevector should be like 0.07 ish ... in total ..
 
     #the value in the Gaussian must be much less than this!
 
-    #Importing hamiltonain from module
-    H = TBH(n,m,dt=0.1e-15,V=True)
     TH1P = H[0]
     TH1N = H[1]
     TH2P = H[2]
@@ -148,6 +141,20 @@ def TB_solver():
         #Solving for wavefunction
         wvf = scipy.linalg.solve_banded((1,1), TH1P, xi_p)
 
+        if video:
+            #Calculate conjugate wave function
+            wvf_conj = np.conjugate(wvf)
+
+            #Probability density function by element wise multiplication
+            #Neglect imaginary part
+            pd = np.multiply(wvf_conj,wvf)
+            pd = np.reshape(pd,(n,m))
+
+            #Plotting
+            plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)),pd, 100, cmap = 'gnuplot')#,cmap='RdGy'
+            plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
+            plt.savefig('Images/'+str(i))
+
 
     #Calculate conjugate wave function
     wvf_conj = np.conjugate(wvf)
@@ -158,7 +165,8 @@ def TB_solver():
     pd = np.reshape(pd,(n,m))
 
     #Plotting
-    plt.contourf(points[0].reshape((n,m)),points[1].reshape((n,m)),pd)#,cmap='RdGy'
+    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)),pd, 100, cmap = 'gnuplot')#,cmap='RdGy'
+    plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
     plt.show()
 
 #     #plotting

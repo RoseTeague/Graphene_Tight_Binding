@@ -8,7 +8,7 @@ from scipy import integrate
 #Parameters
 a = 1.42*10**(-10)
 
-def Crystal(a, Nx, Ny):
+def Crystals(a, Nx, Ny):
     """
     ===============================================================================
     Function to define the crystal sample for graphene
@@ -61,7 +61,7 @@ def Crystal(a, Nx, Ny):
     plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.2')
     return x, y, coord
 
-def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
+def Psi2(s, sigma, kx, ky, coord, m, n, plot=False):
     """
     ===========================================================================
     Creation of a 2D Gaussian wavepacket centered at the origin
