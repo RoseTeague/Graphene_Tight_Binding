@@ -2,6 +2,7 @@
 Module to create a 2-Dimensional Gaussian Wavepacket at t=0
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 def Crystal(m, n):
     """
@@ -58,19 +59,19 @@ def Crystal(m, n):
     #such that further operations can be performed.
     x_1 = np.arange(m)
     x_1 = x_1.reshape((m,1))
-    X[:,] = b*x_1
+    X[:,] = - b*x_1
 
     #Reshaping for further calculations
     X = X.reshape((n*m,1))
 
     #Defining initial position of wave packet.
-    X_0 = 0.5*m*b
-    Y_0 = -0.5*n*a
+    X_0 = X[int(n*m/2 - m/2)-1]
+    Y_0 = Y[int(n*m/2 - m/2)-1]
 
     return X, Y, X_0, Y_0
 
 
-def Psi(s, kx, ky, m, n):
+def Psi(s, kx, ky, m, n,pos):
     """
     ===========================================================================
     Creation of a 2D Gaussian wavepacket
@@ -102,7 +103,7 @@ def Psi(s, kx, ky, m, n):
 
     #calling Crystal function to import all of the positions of atoms and
     #the initial wave packet position
-    X, Y, X_0, Y_0 = Crystal(m,n)
+    X, Y, X_0, Y_0 = pos
 
     #Defining and empty array of complex type for populating
     Psi = np.zeros((n*m,1),dtype=complex)
@@ -113,4 +114,11 @@ def Psi(s, kx, ky, m, n):
     return Psi
 
 if __name__ == "__main__":
-    points = Crystal(10, 10)
+    pos = Crystal(100,100)
+    Psi = Psi(14, 0.1, 0.1, 100, 100, pos)
+    X,Y,X0,Y0 = pos
+    pd = np.abs(Psi)**2
+    plt.contourf(X.reshape((100,100)),Y.reshape((100,100)),pd.reshape((100,100)),100, cmap = 'gnuplot')
+    plt.plot(X,Y,'bo',markersize = 0.2)
+    plt.plot(X0,Y0,'ro',markersize = 0.2)
+    plt.show()
