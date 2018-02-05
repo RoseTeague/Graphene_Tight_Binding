@@ -5,7 +5,7 @@ import numpy as np
 from scipy import constants
 from DD_DP_G import oneDdisorderpotential
 
-def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
+def TBH(DP,n=10,m=10,dt=0.1e-15,lc=10,V=False):
     """Function that creates Hamiltonians of graphene for the split operator
     technique. The number of rows and columns is all that is required to
     construct the matrices. These matrices are prepared in tridiagonal form
@@ -67,7 +67,7 @@ def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
     if V:
 
         #call the potential function ...
-        DP = oneDdisorderpotential(m,n)
+        #DP = oneDdisorderpotential(m,n,lc,pos)
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
@@ -123,6 +123,9 @@ def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
 
     #Setting diagonal elements
     if V:
+
+        #call the potential function ...
+        #DP = oneDdisorderpotential(m,n,lc)
 
         ip = 0
         fp = m
@@ -183,7 +186,7 @@ def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
     else:
 
         #Have not done this part yet ...
-        #only use even numbers for n and m 
+        #only use even numbers for n and m
 
         for i in range(n):
 
@@ -218,4 +221,4 @@ def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
     return TH1P, TH1N, TH2P, TH2N
 
 if __name__ == "__main__":
-    TBH(6,6,dt=0.1e-15,lc=10,V=True)
+    TBH(100,100,0.1e-15,1,True)

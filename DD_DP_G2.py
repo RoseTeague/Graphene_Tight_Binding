@@ -40,27 +40,27 @@ def twoDdisorderpotential(m,n,lc):
     X = points[0]
     x_1 = X[0:n*m:n,0]
     x_2 = X[1:n*m:n,0]
-    
+
     #Exctracting each unique y position.
     Y = points[1]
     y = Y[0:n,0]
-    
+
     #Generate all x positions in an ascending order
     x=np.sort(x_1.tolist()+x_2.tolist())
-    
+
     #Parameters for the strength of the disorder potential in units of eV.
     Delta = 0.3
 
     #Generating sample of random numbers of Guassian distribution along x axis
     Vx = np.random.normal(0,1,2*m)
-    
-    #Generating sample of random numbers of Guassian distribution along y axis 
+
+    #Generating sample of random numbers of Guassian distribution along y axis
     Vy = np.random.normal(0,1,n)
 
     #Generate the two-point matrix for x axis
     X1 = np.tile(x,(2*m,1))
     X2 = X1.T
-    
+
     #Generate the two-point matrix for y axis
     X3 = np.tile(y,(n,1))
     X4 = X3.T
@@ -82,4 +82,4 @@ def twoDdisorderpotential(m,n,lc):
     return Wfinalx, Wfinaly
 
 if __name__ == "__main__":
-    twoDdisorderpotential(10,10)
+    DP2 = twoDdisorderpotential(10,10,10)

@@ -9,6 +9,8 @@ import scipy.linalg
 from DD_TBH import TBH
 import wavepacket
 from wavepacket import *
+import matplotlib.animation as animation
+
 
 #import scipy.fftpack ... this might be a little awkward
 
@@ -39,13 +41,13 @@ def TB_solver(dt,DT):
     points = Crystal(a, m, n)
     wvf = Psi(10*a, 0, 1/a, 1/a, points, m, n)  #wavefunction ... just put some matrix there for now ...
 
-    #wvf_conj=np.conjugate(wvf)
-    #pd = np.multiply(wvf_conj,wvf)
-    #pd = np.reshape(pd,(n,m))
+    wvf_conj=np.conjugate(wvf)
+    pd = np.multiply(wvf_conj,wvf)
+    pd = np.reshape(pd,(n,m))
 
-
-    #plt.contourf(points[0],points[1],pd)
-    #plt.show()
+    #fig = plt.figure()
+    plt.contourf(points[0],points[1],pd)
+    plt.show()
     #import from TBH
 
     #then need to call the hamiltonian ...
@@ -81,17 +83,16 @@ def TB_solver(dt,DT):
 
 
         wvf = scipy.linalg.solve_banded((1,1), TH1P, g)
-#    Calculation of Conjugate wave function
-    wvf_conj=np.conjugate(wvf)
+        #    Calculation of Conjugate wave function
+        wvf_conj=np.conjugate(wvf)
 
-#   Probability density function by element wise multiplication
-    pd = np.multiply(wvf_conj,wvf)
-    pd = np.reshape(pd,(n,m))
+    #   Probability density function by element wise multiplication
+        pd = np.multiply(wvf_conj,wvf)
+        pd = np.reshape(pd,(n,m))
 
-
-
-    plt.contourf(points[0],points[1],pd)
-    plt.show()
+        plt.clf()
+        plt.contourf(points[0],points[1],pd)
+        plt.draw()
 
 
 #

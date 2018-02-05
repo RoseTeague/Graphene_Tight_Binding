@@ -2,6 +2,7 @@
 Module to create a 2-Dimensional Gaussian Wavepacket at t=0
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 def Crystal(m=20, n=10):
     """
@@ -69,7 +70,7 @@ def Crystal(m=20, n=10):
     y_1 = y_1.reshape((n,1))
 
     #Each column of carbon atoms have the same y values and they are all equally
-    #spaced in the schosen supercell. Populating each row with the carbon atom
+    #spaced in the chosen supercell. Populating each row with the carbon atom
     #number multiplied by the spacing between them.
     Y[:,0:m] = - d_y*y_1
     Y_T = Y.T
@@ -94,14 +95,14 @@ def Crystal(m=20, n=10):
     X = X.reshape((n*m,1))
 
     #Defining initial position of wave packet.
-    X_0 = 0.5*m*(d_x + a)
-    Y_0 = -0.5*n*d_y
+    X_0 = X[int(n*m/2 - m/2)-1]
+    Y_0 = Y[int(n*m/2 - m/2)-1]
 
     #need to write some unit tests for this ...
 
     return X, Y, X_0, Y_0
 
-def Psi(s, kx, ky, m, n):
+def Psi(s, kx, ky, m, n, pos):
     """
     ===========================================================================
     Creation of a 2D Gaussian wavepacket
@@ -136,7 +137,7 @@ def Psi(s, kx, ky, m, n):
 
     #calling Crystal function to import all of the positions of carbon atoms and
     #the initial wave packet position
-    X, Y, X_0, Y_0 = Crystal(m,n)
+    X, Y, X_0, Y_0 = pos
 
     #Defining and empty array of complex type for populating
     Psi = np.zeros((n*m,1),dtype=complex)
@@ -147,4 +148,11 @@ def Psi(s, kx, ky, m, n):
     return Psi
 
 if __name__ == "__main__":
-    Crystal(10,10)
+    pos = Crystal(100,100)
+    Psi = Psi(14, 0.1, 0.1, 100, 100, pos)
+    X,Y,X0,Y0 = pos
+    pd = np.abs(Psi)**2
+    plt.contourf(X.reshape((100,100)),Y.reshape((100,100)),pd.reshape((100,100)),100, cmap = 'gnuplot')
+    plt.plot(X,Y,'bo',markersize = 0.2)
+    plt.plot(X0,Y0,'ro',markersize = 0.2)
+    plt.show()

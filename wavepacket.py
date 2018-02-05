@@ -4,12 +4,11 @@ Module to create a 2-Dimensional Gaussian Wavepacket at t=0
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import integrate
-plt.close()
 
 #Parameters
 a = 1.42*10**(-10)
 
-def Crystal(a, Nx, Ny):
+def Crystals(a, Nx, Ny):
     """
     ===============================================================================
     Function to define the crystal sample for graphene
@@ -63,9 +62,10 @@ def Crystal(a, Nx, Ny):
     coord = np.array(coord)
     xpoint,ypoint = coord.T
     #plt.plot(xpoint,ypoint,color = 'gray',marker = '.',linestyle = 'None', markersize = '0.2')
+    #plt.show()
     return x, y, coord
 
-def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
+def Psi2(s, sigma, kx, ky, coord, m, n, plot=False):
     """
     ===========================================================================
     Creation of a 2D Gaussian wavepacket centered at the origin
@@ -102,16 +102,17 @@ def Psi(s, sigma, kx, ky, coord, m, n, plot=False):
     Psi = Psi / np.sqrt(np.pi/s)
     Psi = np.reshape(Psi, (n*m,1))
 
-    #if plot:
-        # Plot the absolute square of the wavefunction
-        # psi2 = np.array(np.abs(Psi)**2)
-        # psi2 = np.reshape(psi2,(n,m))
-        # plt.contourf(coord[0],coord[1],psi2)
-        # plt.savefig('Gaussian on Graphene')
+    if plot:
+        #Plot the absolute square of the wavefunction
+        psi2 = np.array(np.abs(Psi)**2)
+        psi2 = np.reshape(psi2,(n,m))
+        plt.imshow(psi2)
+        plt.show()
+        #plt.savefig('Gaussian on Graphene')
 
     return np.array(Psi)
 
 if __name__ == "__main__":
     a = 1.42*10**(-10)
-    points = Crystal(a, 500, 500)
-    Psi(50*a, 0, 50/a, 50/a, points, 500, 500)
+    points = Crystal(a, 100, 100)
+    psi = Psi(10*a, 0, 10/a, 10/a, points, 100, 100, plot = True)
