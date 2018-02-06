@@ -7,7 +7,9 @@ from scipy import sparse
 import scipy.linalg
 from DD_DP_G import oneDdisorderpotential
 
-def TBH(n=10,m=10,dt=0.1e-15,lc=10,V=False):
+
+
+def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     """Function that creates Hamiltonians of graphene for the split operator
     technique. The number of rows and columns is all that is required to
     construct the matrices. These matrices are prepared in tridiagonal form
