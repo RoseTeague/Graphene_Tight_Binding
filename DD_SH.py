@@ -5,7 +5,7 @@ import numpy as np
 from scipy import constants
 from DD_DP_S import oneDdisorderpotential
 
-def TBH(n=10,m=10,dt=0.1e-15,V=False):
+def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     """Function that creates Hamiltonians of square lattice for the split operator
     technique. The number of rows and columns is all that is required to
     construct the matrices. These matrices are prepared in tridiagonal form
@@ -69,7 +69,7 @@ def TBH(n=10,m=10,dt=0.1e-15,V=False):
 
         #call the potential function ...
 
-        DP = oneDdisorderpotential(m,n)
+#        DP = oneDdisorderpotential(m,n)
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
