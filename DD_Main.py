@@ -27,26 +27,13 @@ Functions required for this method and their necessary output formats are:
                                         - TH2N -
 """
 
-# Import modules for graphene
-# from DD_WP_G import *           # Wavefunction module
-# from DD_DP_G import *           # Potential module
-# from DD_GH import *             # Hamiltonian module
-# from DD_TB_G import *           # Solver module
-
-# Import modules for Square lattice
-from DD_WP_S import *           # Wavefunction module
-from DD_DP_S import *           # Potential module
-from DD_SH import *             # Hamiltonian module
-from DD_TB_S import *           # Solver module
-
-# Import video creation module
-from animate import *
+import math
 
 # Describe system for use in image/video titles
 def TB(lattice,potential):
 
-    n=100
-    m=100
+    n = 500
+    m = 500
     lc = 1
     s = 5*lc
     kx = math.pi/(5*lc)
@@ -54,20 +41,43 @@ def TB(lattice,potential):
     dt = 0.1e-15
     T = 7e-15
 
+    if potential == 'on':
+        V = True
+    else:
+        V = False
+
+    if lattice == 'square':
+        # Import modules for Square lattice
+        from DD_WP_S import Crystal                         # Wavefunction module
+        from DD_WP_S import Psi                             # Wavefunction module
+        from DD_DP_S import oneDdisorderpotential           # Potential module
+        from DD_SH import TBH                               # Hamiltonian module
+        from DD_TB_S import TB_solver_S                     # Solver module
+
+    if lattice == 'graphene':
+        # Import modules for Square lattice
+        from DD_WP_G import Crystal                         # Wavefunction module
+        from DD_WP_G import Psi                             # Wavefunction module
+        from DD_DP_G import oneDdisorderpotential           # Potential module
+        from DD_GH import TBH                               # Hamiltonian module
+        from DD_TB_G import TB_solver                       # Solver module
+
     pos = Crystal(n,m)
     wfc = Psi(s,kx,ky,n,m,pos)
     DP = oneDdisorderpotential(m,n,lc,pos)
-    H = TBH(DP,n,m,dt,V=False)
+    H = TBH(DP,n,m,dt,V)#
 
     #Change this to True to produce an mp4 video
-    animate = True
+    animate = False
 
     if animate:
-        TB_solver(n,m,pos,wfc,DP,H,T,dt,video=True)
+
+        from animate import MakeMovie
+
+        TB_solver_S(n,m,pos,wfc,DP,H,T,dt,video=True)
         MakeMovie('Tight Binding in ' + lattice + ' with ' + potential + ' potential')
     else:
-        TB_solver(n,m,pos,wfc,DP,H,T,dt,False)
-
+        TB_solver_S(n,m,pos,wfc,DP,H,T,dt,False)
 
 
 if __name__ == '__main__':
