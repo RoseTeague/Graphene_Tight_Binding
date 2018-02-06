@@ -168,6 +168,8 @@ def TB_solver(n,m,pos, wvf, DP, H, T, dt, video=False):
     plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)),pd, 100, cmap = 'gnuplot')#,cmap='RdGy'
     plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
     plt.show()
+    
+    return pd
 
 #     #plotting
 #     if display:
@@ -187,6 +189,5 @@ def TB_solver(n,m,pos, wvf, DP, H, T, dt, video=False):
 #         #plt.savefig('hw212.pdf')
 #         #plt.savefig('hw212.png')
 #         plt.show()
-
 if __name__ == '__main__':
     TB_solver()
