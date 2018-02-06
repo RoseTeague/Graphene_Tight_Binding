@@ -93,4 +93,4 @@ def twoDdisorderpotential(m,n,lc):
     return Wfinal
 
 if __name__ == "__main__":
-    twoDdisorderpotential(10,10)
+    twoDdisorderpotential(10,10,10)
