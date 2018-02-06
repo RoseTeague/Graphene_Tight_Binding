@@ -134,15 +134,15 @@ def TB_solver_S(n, m, pos, wvf, DP, H, T, dt, video=False):
         xi_p[1:N-1] = xi_0 + xi_1 + xi_2
 
         #Solving for wavefunction
-        wvf_S = scipy.linalg.solve_banded((1,1), TH1P, xi_p)
+        wvf = scipy.linalg.solve_banded((1,1), TH1P, xi_p)
 
         if video:
             #Calculate conjugate wave function
-            wvf_conj = np.conjugate(wvf_s)
+            wvf_conj = np.conjugate(wvf)
 
             #Probability density function by element wise multiplication
             #Neglect imaginary part
-            pd = np.multiply(wvf_conj,wvf_s)
+            pd = np.multiply(wvf_conj,wvf)
             pd = np.reshape(pd,(n,m))
 
             #Plotting
@@ -152,18 +152,19 @@ def TB_solver_S(n, m, pos, wvf, DP, H, T, dt, video=False):
 
 
     #Calculate conjugate wave function
-    wvf_conj = np.conjugate(wvf_S)
+    wvf_conj = np.conjugate(wvf)
 
     #Probability density function by element wise multiplication
     #Neglect imaginary part
-    pd = np.multiply(wvf_conj,wvf_S)
+    pd = np.multiply(wvf_conj,wvf)
     pd = np.reshape(pd,(n,m))
 
     #Plotting
-    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)),pd, 100, cmap = 'gnuplot')
+    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
     plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
     plt.show()
-    return wvf_S
+
+    return pd
 
 
 #     #plotting
