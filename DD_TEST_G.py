@@ -42,25 +42,26 @@ def Comparison_G():
     ky = math.pi/(5*lc)
     dt = 0.1e-15
     T = 0#0.1e-15
-    V = False
+    V = True
 
     from DD_WP_G import Crystal                         # Wavefunction module
     from DD_WP_G import Psi                             # Wavefunction module
+    from DD_DP_G import oneDdisorderpotential           # Potential module
 
     pos = Crystal(n,m)
     wfc = Psi(s,kx,ky,n,m,pos)
+    DP = oneDdisorderpotential(m,n,lc,pos)
 
     from DD_G import TB_solver_2D
 
-    wvf2D = TB_solver_2D(n, m, pos, wfc, dt, T)
+    wvf2D = TB_solver_2D(DP, n, m, pos, wfc, dt, T, V)
+
 
     # Import modules for Square lattice
 
-    from DD_DP_G import oneDdisorderpotential           # Potential module
     from DD_GH import TBH                               # Hamiltonian module
     from DD_TB_G import TB_solver                     # Solver module
-
-    DP = oneDdisorderpotential(m,n,lc,pos)
+    
     H = TBH(DP,n,m,dt,V)
 
     wvf_G = TB_solver(n,m,pos,wfc,DP,H,T,dt, False)
