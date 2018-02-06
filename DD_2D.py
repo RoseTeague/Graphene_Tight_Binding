@@ -10,7 +10,7 @@ import scipy.linalg
 from scipy.sparse.linalg import expm_multiply
 from scipy.sparse import dia_matrix
 
-def TBH(n=10,m=10,dt=0.1e-15):
+def TBH(DP,n=10,m=10,dt=0.1e-15, V=False):
     """
     """
 
@@ -22,13 +22,34 @@ def TBH(n=10,m=10,dt=0.1e-15):
 
     #Constants that populate the off diagonal elements of the hamiltonian
     H_1 = (HI*1j*constants.e*dt)/constants.hbar
-
+    
+    H_V = 1j*constants.e*dt/constants.hbar
     #Constructing the set of tridiagonal matrices for H_m
     #H = np.zeros((3,n),dtype=complex)
 
-    H_d = np.full(N,0)
-    H_cd_u = np.full(N-1,-H_1)#.reshape((n*m-1,1))
-    H_cd_l = np.full(N-1,-H_1)
+    H_d = np.full(N,0,dtype=complex)
+    
+    if V:
+
+        #call the potential function ...
+
+#        DP = oneDdisorderpotential(m,n)
+
+        #Initial counters are required to populate Hamiltonian
+        ip = 0
+        fp = n
+
+        #Need to loop over each column of carbon atoms to set the disorder potential
+        for j in range(m):
+
+            H_d[ip:fp] = H_V*DP[j,0]
+            H_d[ip:fp] = H_V*DP[j,0]
+
+            ip += n
+            fp += n
+    
+    H_cd_u = np.full(N-1,-H_1,dtype=complex)#.reshape((n*m-1,1))
+    H_cd_l = np.full(N-1,-H_1,dtype=complex)
 
     #need to check these ... might not actually need two of these ...
     H_cd_u[n-1:N:n] = 0
@@ -42,7 +63,7 @@ def TBH(n=10,m=10,dt=0.1e-15):
 
     return H
 
-def TB_solver_2D(n, m, pos, wfc, dt, DT):
+def TB_solver_2D(DP, n, m, pos, wfc, dt, DT, V=False):
     """Split operator technique for propogation of wave packets with square
         lattice tight-binding hamiltonian.
 
@@ -52,7 +73,7 @@ def TB_solver_2D(n, m, pos, wfc, dt, DT):
 
     wvf2D = wfc
 
-    H  = TBH(n,m,dt=0.1e-15)
+    H  = TBH(DP,n,m,dt, V)
 
     #points = Crystal(m, n)
 
