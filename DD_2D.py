@@ -1,4 +1,4 @@
-"""Module for 1 D problem
+"""Module for 2 D problem
 """
 
 import numpy as np
