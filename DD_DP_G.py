@@ -52,7 +52,6 @@ def oneDdisorderpotential(m,n,lc,pos):
     #Generate the two-point spatial correlation matrix
     C = Delta**2*np.exp(-abs(X1-X2)/lc)
 
-
     #Cholesky decomposition of the two-point correlation matrix and generate the final random vector
     L = np.linalg.cholesky(C)
     W = np.dot(L,V)
