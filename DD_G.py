@@ -50,7 +50,7 @@ def TBH(n=10,m=10,dt=0.1e-15):
 
     return H
 
-def TB_solver_2D(n, m, dt, DT):
+def TB_solver_2D(n, m, pos, wfc, dt, DT):
     """Split operator technique for propogation of wave packets with square
         lattice tight-binding hamiltonian.
 
@@ -58,7 +58,7 @@ def TB_solver_2D(n, m, dt, DT):
 
     Ns = round(DT/dt)+1
 
-    wvf = Psi(5,1, 1, m,n)
+    wvf = wfc
 
     H  = TBH(n,m,dt=0.1e-15)
 
@@ -75,6 +75,8 @@ def TB_solver_2D(n, m, dt, DT):
 
     plt.contourf(points[0].reshape((n,m)),points[1].reshape((n,m)),pd)#,cmap='RdGy'
     plt.show()
+    
+    return pd
 
 if __name__ == "__main__":
     #Crystal(5,5)
