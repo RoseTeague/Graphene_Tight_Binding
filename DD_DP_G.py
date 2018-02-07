@@ -5,8 +5,6 @@ Module for 1D correlated Gaussian disorder potential on graphene
 """
 
 import numpy as np
-import DD_WP_G
-from DD_WP_G import *
 
 def oneDdisorderpotential(m,n,lc,pos):
     """
@@ -61,7 +59,8 @@ def oneDdisorderpotential(m,n,lc,pos):
 
     return Wfinal
 
-if __name__ == "__main__":
-    DP = oneDdisorderpotential(10,10,10,pos)
-    plt.plot(DP)
-    plt.show()
+#if __name__ == "__main__":
+    #Need to import and call crystal here ...
+    #DP = oneDdisorderpotential(10,10,10,pos)
+    #plt.plot(DP)
+    #plt.show()
