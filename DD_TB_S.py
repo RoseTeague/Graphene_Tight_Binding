@@ -58,6 +58,7 @@ def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
     N = n*m
 
     #Importing hamiltonain from module. Exctract the different matrices.
+    #can we compress this ... ? 
     TH1P = H[0]
     TH1N = H[1]
     TH2P = H[2]
@@ -133,10 +134,5 @@ def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
     #Neglect imaginary part
     pd = np.multiply(wvf_conj,wvf)
     pd = np.reshape(pd,(n,m))
-
-    #Plotting
-    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
-    plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
-    plt.show()
 
     return pd
