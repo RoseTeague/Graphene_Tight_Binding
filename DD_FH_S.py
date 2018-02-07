@@ -5,7 +5,7 @@ import numpy as np
 from scipy import constants
 from scipy import sparse
 
-def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
+def FTBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
     """
     """
 
@@ -24,11 +24,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
 
     H_d = np.full(N,0,dtype=complex)
 
-    if V:
-
-        #call the potential function ...
-
-#        DP = oneDdisorderpotential(m,n)
+    if V == 'one dimensional':
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
@@ -43,13 +39,15 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
             ip += n
             fp += n
 
+    #Need to add a part in for the two dimensional part ... file needs to be written first!
+
     H_cd_u = np.full(N-1,-H_1,dtype=complex)#.reshape((n*m-1,1))
     H_cd_l = np.full(N-1,-H_1,dtype=complex)
 
     #need to check these ... might not actually need two of these ...
     H_cd_u[n-1:N:n] = 0
     H_cd_l[n-1:N:n] = 0
-    #print(H_cd_u)
+
     #need to set every other one of these to zero ...
 
     H_rd = np.full(n*m-n,-H_1)
