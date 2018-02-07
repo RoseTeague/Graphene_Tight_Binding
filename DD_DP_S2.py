@@ -72,7 +72,7 @@ def twoDdisorderpotential(m,n,lc,pos):
     Wxf=np.zeros((n,m))
     Wyf=np.zeros((n,m))
 
-    Wxf[:,0:m]= Wx1
+    Wxf[:,0:m]= Wx
     Wxfinal=Wxf.T.reshape((n*m,1))
 
     Wyf[:,0:m]=Wy.reshape((n,1))
