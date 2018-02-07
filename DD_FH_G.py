@@ -5,7 +5,7 @@ import numpy as np
 from scipy import constants
 from scipy import sparse
 
-def TBH(DP, n=10,m=10,dt=0.1e-15, V=False):
+def FTBH(DP, n=10,m=10,dt=0.1e-15, V='no'):
     """
     """
 
@@ -20,14 +20,9 @@ def TBH(DP, n=10,m=10,dt=0.1e-15, V=False):
     H_V = 1j*constants.e*dt/constants.hbar
 
     #Constructing the set of tridiagonal matrices for H_m
-    #H = np.zeros((3,n),dtype=complex)
-
     H_d = np.full(N,0,dtype=complex)
 
-    if V:
-
-        #call the potential function ...
-#        DP = oneDdisorderpotential(m,n)
+    if V == 'one dimensional':
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
@@ -40,41 +35,27 @@ def TBH(DP, n=10,m=10,dt=0.1e-15, V=False):
             #differently, because the atoms are in a zig zag.
             if j % 2 == 0:
 
-                H_d[ip:fp:2] = H_V*DP[2*j+1,0]
-                H_d[ip:fp:2] = H_V*DP[2*j+1,0]
-
-                H_d[ip+1:fp+1:2] = H_V*DP[2*j,0]
-                H_d[ip+1:fp+1:2] = H_V*DP[2*j,0]
+                H_d[ip:fp:2] = -H_V*DP[2*j+1,0]
+                H_d[ip+1:fp+1:2] = -H_V*DP[2*j,0]
 
             else:
 
-                H_d[ip:fp:2] = H_V*DP[2*j,0]
-                H_d[ip:fp:2] = H_V*DP[2*j,0]
+                H_d[ip:fp:2] = -H_V*DP[2*j,0]
+                H_d[ip+1:fp+1:2] = -H_V*DP[2*j+1,0]
 
-                H_d[ip+1:fp+1:2] = H_V*DP[2*j+1,0]
-                H_d[ip+1:fp+1:2] = H_V*DP[2*j+1,0]
 
-            #conting to the next set of atoms
+            #counting to the next set of atoms
             ip += n
             fp += n
 
+    #Need to add a part in for the two dimensional part ... 
 
-    H_cd_u = np.full(N-1,-H_1,dtype=complex)#.reshape((n*m-1,1))
-    H_cd_l = np.full(N-1,-H_1,dtype=complex)
+    H_cd = np.full(N-1,-H_1,dtype=complex)
+    H_cd[n-1:N:n] = 0
 
-    #need to check these ... might not actually need two of these ...
-    #Should this be n or m ... ?
-    H_cd_u[n-1:N:n] = 0
-    H_cd_l[n-1:N:n] = 0
-    #print(H_cd_u)
-    #need to set every other one of these to zero ...
+    H_rd = np.full(n*m-n,-H_1)
+    H_rd[1:N:2] = 0
 
-    H_rd_u = np.full(n*m-n,-H_1)
-    H_rd_l = np.full(n*m-n,-H_1)
-
-    H_cd_u[1:N:2] = 0
-    H_cd_l[1:N:2] = 0
-
-    H = sparse.csr_matrix(np.diag(H_d, 0) + np.diag(H_rd_l, -n) + np.diag(H_rd_u, n) + np.diag(H_cd_l, -1) + np.diag(H_cd_u, 1))
+    H = sparse.csr_matrix(np.diag(H_d, 0) + np.diag(H_rd, -n) + np.diag(H_rd, n) + np.diag(H_cd, -1) + np.diag(H_cd, 1))
 
     return H
