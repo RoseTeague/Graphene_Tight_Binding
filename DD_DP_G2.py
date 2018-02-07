@@ -5,10 +5,8 @@ Module for 2D correlated Gaussian disorder potential on graphene
 """
 
 import numpy as np
-import DD_WP_G
-from DD_WP_G import *
 
-def twoDdisorderpotential(m,n,lc):
+def twoDdisorderpotential(m,n,lc,pos):
     """
     ============================================================================
     Create one-dimensional disorder potential on graphene lattice
@@ -31,25 +29,22 @@ def twoDdisorderpotential(m,n,lc):
          The final potential at each atom
     """
 
-    #Calling Crystal to obtain the positions of all carbon atoms.
-    points = Crystal(m, n)
-
     #Exctracting each unique x position.
-    X = points[0]
+    X = pos[0]
     x_1 = X[0:n*m:n,0]
     x_2 = X[1:n*m:n,0]
-    
+
     #Exctracting each unique y position.
-    Y = points[1]
+    Y = pos[1]
     y = Y[0:n,0]
-        
+
     #Parameters for the strength of the disorder potential in units of eV.
     Delta = 0.3
 
     #Generating sample of random numbers of Guassian distribution along x axis
     Vx = np.random.normal(0,1,m)
-    
-    #Generating sample of random numbers of Guassian distribution along y axis 
+
+    #Generating sample of random numbers of Guassian distribution along y axis
     Vy = np.random.normal(0,1,n)
 
     #Generate the two-point matrix for two rows along x axis
@@ -57,7 +52,7 @@ def twoDdisorderpotential(m,n,lc):
     X2 = X1.T
     X3 = np.tile(x_2,(m,1))
     X4 = X3.T
-    
+
     #Generate the two-point matrix for y axis
     X5 = np.tile(y,(n,1))
     X6 = X5.T
@@ -78,19 +73,19 @@ def twoDdisorderpotential(m,n,lc):
     #Put the potentials on all atoms and reshape them to the requried output format
     Wxf=np.zeros((n,m))
     Wyf=np.zeros((n,m))
-    
+
     Wxf[0:n:2,0:m]= Wx1
     Wxf[1:n:2,0:m]= Wx2
     Wxfinal=Wxf.T.reshape((n*m,1))
-    
-    
+
     Wyf[:,0:m]=Wy.reshape((n,1))
     Wyfinal=Wyf.T.reshape((n*m,1))
-    
+
     #The final potential for each atom is the sum of the x- and y- potential component
     Wfinal=Wxfinal+Wyfinal
-    
+
     return Wfinal
 
-if __name__ == "__main__":
-    twoDdisorderpotential(10,10,10)
+#if __name__ == "__main__":
+    #Need to import and call crystal here ... 
+    #twoDdisorderpotential(5,5,10,pos)
