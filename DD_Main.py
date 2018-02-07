@@ -28,9 +28,10 @@ Functions required for this method and their necessary output formats are:
 """
 
 import math
+import matplotlib.pyplot as plt
 
 # Describe system for use in image/video titles
-def TB(lattice,potential):
+def TB(lattice,V):
 
     n = 500
     m = 500
@@ -40,11 +41,12 @@ def TB(lattice,potential):
     ky = math.pi/(5*lc)
     dt = 0.1e-15
     T = 7e-15
+    Ns = round(T/dt) + 1
 
-    if potential == 'on':
-        V = True
-    else:
-        V = False
+    #We should just be able to import the solver ... there does not need to be
+    #Any specification on which one it is, since both are the same ...
+
+    from DD_TB_S import TB_solver_S                         # Solver module
 
     if lattice == 'square':
         # Import modules for Square lattice
@@ -52,20 +54,29 @@ def TB(lattice,potential):
         from DD_WP_S import Psi                             # Wavefunction module
         from DD_DP_S import oneDdisorderpotential           # Potential module
         from DD_SH import TBH                               # Hamiltonian module
-        from DD_TB_S import TB_solver_S                     # Solver module
+
 
     if lattice == 'graphene':
         # Import modules for Square lattice
         from DD_WP_G import Crystal                         # Wavefunction module
         from DD_WP_G import Psi                             # Wavefunction module
         from DD_DP_G import oneDdisorderpotential           # Potential module
+        from DD_DP_G2 import twoDdisorderpotential          # Potential module
         from DD_GH import TBH                               # Hamiltonian module
-        from DD_TB_G import TB_solver                       # Solver module
+
+        #Need to have some assert statements here ...
 
     pos = Crystal(n,m)
     wfc = Psi(s,kx,ky,n,m,pos)
+    #this means that we calcualte it even if we do not need it ... I don't like that
+    #Need to add it so that the two dimensional disorder potential can be chosen here ...
+
+    #Choose the 1D potential first ... if it is not correct, then write over it ...
     DP = oneDdisorderpotential(m,n,lc,pos)
-    H = TBH(DP,n,m,dt,V)#
+    if V == 'two dimensional':
+        DP = twoDdisorderpotential(m,n,lc,pos)
+
+    H = TBH(DP,n,m,dt,V)
 
     #Change this to True to produce an mp4 video
     animate = False
@@ -74,11 +85,73 @@ def TB(lattice,potential):
 
         from animate import MakeMovie
 
-        TB_solver_S(n,m,pos,wfc,DP,H,T,dt,video=True)
+        pd = TB_solver_S(n,m,pos,wfc,H,T,dt,animate)
+        MakeMovie('Tight Binding in ' + lattice + ' with ' + V + ' potential')
+    else:
+
+        pd = TB_solver_S(n,m,pos,wfc,H,T,dt,animate)
+
+    #Plotting
+    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
+    plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
+    plt.show()
+
+def TBS(lattice,V):
+    """
+    """
+
+    n = 100
+    m = 100
+    lc = 2
+    s = 5*lc
+    kx = math.pi/(5*lc)
+    ky = math.pi/(5*lc)
+    dt = 0.1e-15
+    T = 4e-15
+    Ns = round(T/dt) + 1
+
+    from DD_SS import TB_ss                                 # Solver module
+
+    if lattice == 'square':
+        # Import modules for Square lattice
+        from DD_WP_S import Crystal                         # Wavefunction module
+        from DD_WP_S import Psi                             # Wavefunction module
+        from DD_DP_S import oneDdisorderpotential           # Potential module
+        from DD_FH_S import FTBH                             # Hamiltonian module
+
+    if lattice == 'graphene':
+        # Import modules for Square lattice
+        from DD_WP_G import Crystal                         # Wavefunction module
+        from DD_WP_G import Psi                             # Wavefunction module
+        from DD_DP_G import oneDdisorderpotential           # Potential module
+        from DD_FH_G import FTBH                             # Hamiltonian module
+
+    pos = Crystal(n,m)
+    wfc = Psi(s,kx,ky,n,m,pos)
+    DP = oneDdisorderpotential(m,n,lc,pos)
+    H = FTBH(DP,n,m,dt,V)
+
+    #why does the solver take the DP argument?
+    pd = TB_ss(n,m,pos,wfc,H,T,dt)
+
+    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
+    plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
+    plt.show()
+
+
+    """
+    #Change this to True to produce an mp4 video
+    animate = False
+
+    if animate:
+
+        from animate import MakeMovie
+
+        TB_ss(DP,n,m,pos,wfc,H,T,dt)
         MakeMovie('Tight Binding in ' + lattice + ' with ' + potential + ' potential')
     else:
-        TB_solver_S(n,m,pos,wfc,DP,H,T,dt,False)
-
+        TB_ss(DP,n,m,pos,wfc,H,T,dt)
+    """
 
 if __name__ == '__main__':
-    TB('Square', 'no')
+    TB('graphene', 'two dimensional')
