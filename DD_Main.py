@@ -53,6 +53,7 @@ def TB(lattice,V):
         from DD_WP_S import Crystal                         # Wavefunction module
         from DD_WP_S import Psi                             # Wavefunction module
         from DD_DP_S import oneDdisorderpotential           # Potential module
+        from DD_DP_S2 import twoDdisorderpotential          # Potential module
         from DD_SH import TBH                               # Hamiltonian module
 
 
@@ -117,6 +118,7 @@ def TBS(lattice,V):
         from DD_WP_S import Crystal                         # Wavefunction module
         from DD_WP_S import Psi                             # Wavefunction module
         from DD_DP_S import oneDdisorderpotential           # Potential module
+        from DD_DP_S2 import twoDdisorderpotential          # Potential module
         from DD_FH_S import FTBH                             # Hamiltonian module
 
     if lattice == 'graphene':
@@ -124,15 +126,32 @@ def TBS(lattice,V):
         from DD_WP_G import Crystal                         # Wavefunction module
         from DD_WP_G import Psi                             # Wavefunction module
         from DD_DP_G import oneDdisorderpotential           # Potential module
+        from DD_DP_G2 import twoDdisorderpotential          # Potential module
         from DD_FH_G import FTBH                             # Hamiltonian module
 
     pos = Crystal(n,m)
     wfc = Psi(s,kx,ky,n,m,pos)
     DP = oneDdisorderpotential(m,n,lc,pos)
-    H = FTBH(DP,n,m,dt,V)
+    
+    if V == 'two dimensional':
+        DP = twoDdisorderpotential(m,n,lc,pos)
+        
+    FH = FTBH(DP,n,m,dt,V)
+
+    #Change this to True to produce an mp4 video
+    animate = False
+
+    if animate:
+
+        from animate import MakeMovie
+
+        pd = TB_ss(n,m,pos,wfc,FH,T,dt,animate)
+        MakeMovie('Tight Binding in ' + lattice + ' with ' + V + ' potential')
+    else:
+
 
     #why does the solver take the DP argument?
-    pd = TB_ss(n,m,pos,wfc,H,T,dt)
+        pd = TB_ss(n,m,pos,wfc,FH,T,dt)
 
     plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
     plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
@@ -154,4 +173,4 @@ def TBS(lattice,V):
     """
 
 if __name__ == '__main__':
-    TB('graphene', 'two dimensional')
+    TBS('graphene', 'one dimensional')
