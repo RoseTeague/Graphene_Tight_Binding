@@ -65,7 +65,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     #Setting diagonal elements
 
     #Need to specify if there is an external potential
-    if V:
+    if V == 'one dimensional':
 
         #call the potential function ...
 
@@ -83,10 +83,20 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
 
             ip += n
             fp += n
+    elif V == 'two dimensional':
+
+        TH1P[1,:] = 1 + 0.25*H_V*DP.reshape((1,N))
+        TH1N[1,:] = 1 - 0.25*H_V*DP.reshape((1,N))
+        
     else:
 
         TH1P[1] = 1
         TH1N[1] = 1
+        
+        
+   
+    #Need to add a part in for the two dimensional part ... 
+
 
     #Setting off-diagonal elements
     TH1P[0] = H_1
@@ -106,7 +116,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     #Setting diagonal elements
 
     #Need to specify if there is an external potential
-    if V:
+    if V == 'one dimensional':
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
@@ -120,6 +130,13 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
 
             ip += m
             fp += m
+    elif V == 'two dimensional':
+
+        DP = DP.reshape((n,m)).T.reshape((N,1))
+        #might not need to do all of these reshapes ...
+        TH2P[1,:] = 1 + H_V*DP.reshape((1,N))
+        TH2N[1,:] = 1 - H_V*DP.reshape((1,N))
+        
     else:
 
         TH2P[1] = 1
