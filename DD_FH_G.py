@@ -27,6 +27,7 @@ def FTBH(DP, n=10,m=10,dt=0.1e-15, V='no'):
         #Initial counters are required to populate Hamiltonian
         ip = 0
         fp = n
+        
 
         #Need to loop over each column of carbon atoms to set the disorder potential
         for j in range(m):
@@ -47,7 +48,11 @@ def FTBH(DP, n=10,m=10,dt=0.1e-15, V='no'):
             #counting to the next set of atoms
             ip += n
             fp += n
+            
+    elif V == 'two dimensional':
 
+        H_d = H_V*DP
+        
     #Need to add a part in for the two dimensional part ... 
 
     H_cd = np.full(N-1,-H_1,dtype=complex)
