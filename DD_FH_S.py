@@ -38,6 +38,9 @@ def FTBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
 
             ip += n
             fp += n
+            
+    elif V == 'two dimensional':
+        H_d = H_V*DP
 
     #Need to add a part in for the two dimensional part ... file needs to be written first!
 
