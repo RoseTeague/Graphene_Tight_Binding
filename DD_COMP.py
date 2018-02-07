@@ -24,22 +24,27 @@ def Comparison(lattice,V):
         from DD_WP_S import Crystal                         # Wavefunction module
         from DD_WP_S import Psi                             # Wavefunction module
         from DD_DP_S import oneDdisorderpotential           # Potential module
-        from DD_SH import TBH                               # Hamiltonian module
+        from DD_DP_S2 import twoDdisorderpotential          # Potential module
+        from DD_SH import TBH                               # Hamiltonian module        
         from DD_FH_S import FTBH                            # Hamiltonian module
 
     if lattice == 'graphene':
         from DD_WP_G import Crystal                         # Wavefunction module
         from DD_WP_G import Psi                             # Wavefunction module
         from DD_DP_G import oneDdisorderpotential           # Potential module
+        from DD_DP_G2 import twoDdisorderpotential          # Potential module 
         from DD_GH import TBH                               # Hamiltonian module
         from DD_FH_G import FTBH                            # Hamiltonian module
 
     pos = Crystal(n,m)
     wfc = Psi(s,kx,ky,n,m,pos)
     DP = oneDdisorderpotential(m,n,lc,pos)
+    
+    if V == 'two dimensional':
+        DP = twoDdisorderpotential(m,n,lc,pos)
+
 
     from DD_SS import TB_ss                                 # Solver module
-
     FH = FTBH(DP,n,m,dt,V)
 
     wvf_ss = TB_ss(n, m, pos, wfc, FH, T, dt)
