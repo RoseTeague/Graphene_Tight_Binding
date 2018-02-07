@@ -3,13 +3,8 @@
 
 import numpy as np
 from scipy import constants
-from scipy import sparse
-import scipy.linalg
-from DD_DP_G import oneDdisorderpotential
 
-
-
-def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
+def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
     """Function that creates Hamiltonians of graphene for the split operator
     technique. The number of rows and columns is all that is required to
     construct the matrices. These matrices are prepared in tridiagonal form
@@ -50,7 +45,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
     assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
-    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns" 
+    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns"
 
     #Total number of carbon atoms
     N = n*m
@@ -70,10 +65,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     TH1N = np.zeros((3,N),dtype=complex)
 
     #Setting diagonal elements of TH1P and TH1N
-    if V:
-
-        #call the potential function ...
-        DP = oneDdisorderpotential(m,n)
+    if V == 'one dimensional':
 
         #Initial counters are required to populate Hamiltonian
         ip = 0
@@ -104,6 +96,11 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
             ip += n
             fp += n
 
+    elif V == 'two dimensional':
+
+        TH1P[1,:] = 1 + 0.25*H_V*DP.reshape((1,N))
+        TH1N[1,:] = 1 - 0.25*H_V*DP.reshape((1,N))
+
     else:
 
         TH1P[1] = 1
@@ -128,7 +125,7 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     TH2N = np.zeros((3,N),dtype=complex)
 
     #Setting diagonal elements
-    if V:
+    if V == 'one dimensional':
 
         ip = 0
         fp = m
@@ -147,6 +144,13 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
 
             ip += m
             fp += m
+
+    elif V == 'two dimensional':
+
+        DP = DP.reshape((n,m)).T.reshape((N,1))
+        #might not need to do all of these reshapes ...
+        TH2P[1,:] = 1 + H_V*DP.reshape((1,N))
+        TH2N[1,:] = 1 - H_V*DP.reshape((1,N))
 
     else:
 
@@ -190,5 +194,5 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     #return matrix forms of hamiltonians for split operator technique
     return TH1P, TH1N, TH2P, TH2N
 
-if __name__ == "__main__":
-    TBH(5,5,dt=0.1e-15,lc=10,V=True)
+#if __name__ == "__main__":
+    #TBH(5,5,dt=0.1e-15,V='one dimensional')
