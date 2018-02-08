@@ -33,20 +33,19 @@ import matplotlib.pyplot as plt
 # Describe system for use in image/video titles
 def TB(lattice,V):
 
-    n = 500
-    m = 500
+    n = 50#500
+    m = 0#500
     lc = 1
     s = 5*lc
-    kx = math.pi/(5*lc)
-    ky = math.pi/(5*lc)
+    kx = 1#math.pi/(5*lc)
+    ky = 0#math.pi/(5*lc)
     dt = 0.1e-15
-    T = 7e-15
+    T = 5e-15
     Ns = round(T/dt) + 1
 
     #We should just be able to import the solver ... there does not need to be
     #Any specification on which one it is, since both are the same ...
 
-    from DD_TB_S import TB_solver_S                         # Solver module
 
     if lattice == 'square':
         # Import modules for Square lattice
@@ -55,6 +54,7 @@ def TB(lattice,V):
         from DD_DP_S import oneDdisorderpotential           # Potential module
         from DD_DP_S2 import twoDdisorderpotential          # Potential module
         from DD_SH import TBH                               # Hamiltonian module
+        from DD_TB_S import TB_solver_S                         # Solver module
 
 
     if lattice == 'graphene':
@@ -64,6 +64,18 @@ def TB(lattice,V):
         from DD_DP_G import oneDdisorderpotential           # Potential module
         from DD_DP_G2 import twoDdisorderpotential          # Potential module
         from DD_GH import TBH                               # Hamiltonian module
+        from DD_TB_S import TB_solver_S                         # Solver module
+
+
+    if lattice == '1D square':
+        # Import modules for 1D square lattice
+        from DD_1D_modified import Crystal
+        from DD_1D_modified import Psi
+        from DD_1D_modified import TBH
+        from DD_1D_modified import TB_solver_S
+
+        def oneDdisorderpotential(m,n,lc,pos):
+            return 1
 
         #Need to have some assert statements here ...
 
@@ -80,7 +92,7 @@ def TB(lattice,V):
     H = TBH(DP,n,m,dt,V)
 
     #Change this to True to produce an mp4 video
-    animate = False
+    animate = True
 
     if animate:
 
@@ -93,9 +105,9 @@ def TB(lattice,V):
         pd = TB_solver_S(n,m,pos,wfc,H,T,dt,animate)
 
     #Plotting
-    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
-    plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
-    plt.show()
+    # plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
+    # plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
+    # plt.show()
 
 def TBS(lattice,V):
     """
@@ -132,10 +144,10 @@ def TBS(lattice,V):
     pos = Crystal(n,m)
     wfc = Psi(s,kx,ky,n,m,pos)
     DP = oneDdisorderpotential(m,n,lc,pos)
-    
+
     if V == 'two dimensional':
         DP = twoDdisorderpotential(m,n,lc,pos)
-        
+
     FH = FTBH(DP,n,m,dt,V)
 
     #Change this to True to produce an mp4 video
@@ -173,4 +185,4 @@ def TBS(lattice,V):
     """
 
 if __name__ == '__main__':
-    TBS('graphene', 'one dimensional')
+    TB('1D square', 'one dimensional')
