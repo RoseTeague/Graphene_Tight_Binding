@@ -20,9 +20,9 @@ systems.
 Once you have downlaoded these, install cv2 using the command below which will be
 necessary for producing the video files.
 
-'''ruby
+```ruby
 pip install opencv-python
-'''
+```
 
 **Create an empty folder called Images into the work directory**
 
