@@ -58,7 +58,8 @@ def oneDdisorderpotential(m,n,lc,pos):
     W=np.dot(L,V)
 
     #Reshape the vector into a column for further calculations.
-    Wfinal=W.reshape((m,1))
+    Wf[:,0:m]=W
+    Wfinal=Wf.T.reshape((n*m,1))
 
     return Wfinal
 
