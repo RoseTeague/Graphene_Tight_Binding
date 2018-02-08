@@ -151,7 +151,7 @@ def TBS(lattice,V):
     FH = FTBH(DP,n,m,dt,V)
 
     #Change this to True to produce an mp4 video
-    animate = False
+    animate = True
 
     if animate:
 
@@ -169,20 +169,17 @@ def TBS(lattice,V):
     plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
     plt.show()
 
-
-    """
-    #Change this to True to produce an mp4 video
-    animate = False
-
-    if animate:
-
-        from animate import MakeMovie
-
-        TB_ss(DP,n,m,pos,wfc,H,T,dt)
-        MakeMovie('Tight Binding in ' + lattice + ' with ' + potential + ' potential')
-    else:
-        TB_ss(DP,n,m,pos,wfc,H,T,dt)
-    """
+    # #Change this to True to produce an mp4 video
+    # animate = False
+    #
+    # if animate:
+    #
+    #     from animate import MakeMovie
+    #
+    #     TB_ss(DP,n,m,pos,wfc,H,T,dt)
+    #     MakeMovie('Tight Binding in ' + lattice + ' with ' + potential + ' potential')
+    # else:
+    #     TB_ss(DP,n,m,pos,wfc,H,T,dt)
 
 if __name__ == '__main__':
-    TB('1D square', 'one dimensional')
+    TBS('graphene', 'one dimensional')
