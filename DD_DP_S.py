@@ -22,7 +22,7 @@ def oneDdisorderpotential(m,n,lc,pos):
     lc : float
         correlation length
         
-    pos: list
+    pos: float, list
         A list containing position information of atoms
 
     Returns
