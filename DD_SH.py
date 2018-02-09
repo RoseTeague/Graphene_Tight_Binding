@@ -1,149 +1,144 @@
+#!/usr/bin/env python3
 """Module for Tight-Binding Hamiltonian for square lattice
 """
 
 import numpy as np
 from scipy import constants
-from DD_DP_S import oneDdisorderpotential
 
 def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
-    """Function that creates Hamiltonians of square lattice for the split operator
-    technique. The number of rows and columns is all that is required to
-    construct the matrices. These matrices are prepared in tridiagonal form
-    for efficient calculations in the split operator technique.
+    """
+    ============================================================================
+          Tight Binding Hamiltonian of Square Lattice in Tridiagonal Form
+    ============================================================================
+
+    Function that creates Hamiltonian of square lattice for the split operator
+    technique. These matrices are prepared in tridiagonal form for efficient
+    calculations in the split operator technique.
+
+    In a square lattice the hopping up and down a column is identical to hopping
+    left and right along a row. Hence, the tridiagonal matrices have the same
+    form for the off diagonal elements, but can differ in the diagonal elements
+    in the presence of an external potential.
+
+    The diagonal elements contain the information of the atoms in the square
+    lattice. The reference energy of the orbtial is taken to be zero, for
+    simplicity. If there is an external potential on an atom in the lattice,
+    it will appear on the diagonal. If there is no external potential, then
+    thers is only a 1 along the diagonal in the split operator technique.
+
+    The off diagonal elements describe the hopping between atoms in the lattice.
+    Hopping along columns and rows is the same in a square lattice, since each
+    atom has hopping contributions up, down, left and right. Hence, there are
+    blocks of hopping integrals followed by a zero to describe the communication
+    between nearest neighbours.
 
     Inputs
     ------
-    n - int, number of rows of carbon atoms
+    n - int,
+        number of rows of carbon atoms
 
-    m - int, number of columns of carbon atoms
+    m - int,
+        number of columns of carbon atoms
 
-    dt - float, time step in seconds
+    dt - float or int,
+        time step in seconds
 
-    V - boolean, determines if there is an external potential
+    V - string,
+        determines wha type of external potential to include
 
     Parameters
     ----------
-    HI - float, hopping integral of carbon
+    HI - float,
+        hopping integral of square lattice
 
     Returns
     -------
-    TH1P - 3x(n*m) matrix, tridiagonal matrix for H_m of split operator technique.
-            Positive version in the linear equation.
+    TH1P - 3x(n*m) matrix,
+        tridiagonal matrix for H_m of split operator technique. Positive version
+        in the linear equation.
 
-    TH1N - 3x(n*m) matrix, tridiagonal matrix for H_m of split operator technique
-            Negative version in the linear equation.
+    TH1N - 3x(n*m) matrix,
+        tridiagonal matrix for H_m of split operator technique. Negative version
+        in the linear equation.
 
-    TH2P - 3x(n*m) matrix, tridiagonal matrix for H_n of split operator technique
-            Positive version in the linear equation.
+    TH2P - 3x(n*m) matrix,
+        tridiagonal matrix for H_n of split operator technique. Positive version
+        in the linear equation.
 
-    TH2N - 3x(n*m) matrix, tridiagonal matrix for H_n of split operator technique
-            Negative version in the linear equation.
+    TH2N - 3x(n*m) matrix,
+        tridiagonal matrix for H_n of split operator technique. Negative version
+        in the linear equation.
 
-
-    For further details of matrices of split operator technique see ...
     """
 
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(V) is str, "The specification for the potential must be a string"
+    assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
+    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns"
+    assert type(dt) is float or int, "The time step must be numeric"
 
-    #Total number of carbon atoms
+    #Total number of carbon atoms.
     N = n*m
 
-    #Hopping integral in eV puts matrix elements in with sensible numbers
-    HI = -2.7#should really define two hopping integrals ... one in the x direction and another in the y ...
+    #Hopping integral in eV puts matrix elements in with sensible numbers.
+    HI = -2.7
 
-    #it seems to be insensitive to the numerical value here ... this is concerning!
+    #Constants that populate the off diagonal elements of the hamiltonian.
     H_1 = (HI*1j*constants.e*dt*0.25)/constants.hbar
     H_2 = (HI*1j*constants.e*dt*0.5)/constants.hbar
 
-    H_V = 1j*constants.e*dt*0.5/constants.hbar#need to check this ...
+    #Constant that multiplies the disorder potential on the diagonal element.
+    H_V = 1j*constants.e*dt*0.5/constants.hbar
 
-    #Constructing the set of tridiagonal matrices for H_m
+    #Constructing the set of tridiagonal matrices for H_m.
     TH1P = np.zeros((3,N),dtype=complex)
     TH1N = np.zeros((3,N),dtype=complex)
 
-    #Setting diagonal elements
-
-    #Need to specify if there is an external potential
-    if V == 'one dimensional':
-
-        #call the potential function ...
-
-#        DP = oneDdisorderpotential(m,n)
-
-        #Initial counters are required to populate Hamiltonian
-        ip = 0
-        fp = n
-
-        #Need to loop over each column of carbon atoms to set the disorder potential
-        for j in range(m):
-
-            TH1P[1,ip:fp] = 1 + 0.25*H_V*DP[j,0]
-            TH1N[1,ip:fp] = 1 - 0.25*H_V*DP[j,0]
-
-            ip += n
-            fp += n
-    elif V == 'two dimensional':
+    #Setting diagonal elements of TH1P and TH1N. If there is a disorder potenital
+    #then it is included here.
+    if V == 'one dimensional' or V == 'two dimensional':
 
         TH1P[1,:] = 1 + 0.25*H_V*DP.reshape((1,N))
         TH1N[1,:] = 1 - 0.25*H_V*DP.reshape((1,N))
-        
+
     else:
 
         TH1P[1] = 1
         TH1N[1] = 1
-        
-        
-   
-    #Need to add a part in for the two dimensional part ... 
 
-
-    #Setting off-diagonal elements
+    #Setting off-diagonal elements. Most of these are equal to the hopping integral
+    #term, so we set all of them to that initially.
     TH1P[0] = H_1
     TH1N[0] = -H_1
     TH1P[2] = H_1
     TH1N[2] = -H_1
 
+    #Then reset the ones that should be zero because different columns do not
+    #talk to eachother in this matrix.
     TH1P[0,0:N:n] = 0
     TH1N[0,0:N:n] = 0
     TH1P[2,n-1:N:n] = 0
     TH1N[2,n-1:N:n] = 0
 
-    #Construct the set of tridiagonal matrices for H_n
+    #Construct the set of tridiagonal matrices for H_n.
     TH2P = np.zeros((3,N),dtype=complex)
     TH2N = np.zeros((3,N),dtype=complex)
 
-    #Setting diagonal elements
-
-    #Need to specify if there is an external potential
-    if V == 'one dimensional':
-
-        #Initial counters are required to populate Hamiltonian
-        ip = 0
-        fp = m
-
-        #Need to loop over each column of carbon atoms to set the disorder potential
-        for j in range(n):
-
-            TH2P[1,ip:fp] = 1 + H_V*DP[0:m,0]
-            TH2N[1,ip:fp] = 1 - H_V*DP[0:m,0]
-
-            ip += m
-            fp += m
-    elif V == 'two dimensional':
+    #Setting diagonal elements of TH2P and TH2N. If there is a disorder potenital
+    #then it is included here.
+    if V == 'one dimensional' or V == 'two dimensional':
 
         DP = DP.reshape((n,m)).T.reshape((N,1))
-        #might not need to do all of these reshapes ...
         TH2P[1,:] = 1 + H_V*DP.reshape((1,N))
         TH2N[1,:] = 1 - H_V*DP.reshape((1,N))
-        
+
     else:
 
         TH2P[1] = 1
         TH2N[1] = 1
 
-
-    #Setting off-diagonal elements of m matrix
+    #Setting off-diagonal elements of m matrix in the same way as n.
     TH2P[0] = H_2
     TH2N[0] = -H_2
     TH2P[2] = H_2
@@ -154,11 +149,18 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
     TH2P[2,m-1:N:m] = 0
     TH2N[2,m-1:N:m] = 0
 
-    #also need to work out if we can do periodic boundary conditions ...
-
-    #return matrix forms of hamiltonians for split operator technique
-
+    #return matrix forms of hamiltonians for split operator technique.
     return TH1P, TH1N, TH2P, TH2N
 
 if __name__ == "__main__":
-    TBH(5,5,dt=0.1e-15,V=True)
+    from DD_WP_S import Crystal
+    from DD_DP_S import oneDdisorderpotential
+
+    n = 4
+    m = 4
+    lc = 5
+
+    pos = Crystal(m,n)
+    DP = oneDdisorderpotential(m,n,lc,pos)
+
+    TBH(DP, 5, 5, dt=0.1e-15, V='one dimensional')
