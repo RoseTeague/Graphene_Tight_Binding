@@ -7,7 +7,16 @@
 def linedefect(p,m,n,psi,LISTH):
     
     """
+    ============================================================================
     Function for creating a line defect in the system
+    ============================================================================
+
+    This function takes the index of the column of defects, the number of atoms 
+    along x and y axis, the wave function psi and the list containing four Hamilto-
+    nians as the inputs. It will then delete one column in both the wave function 
+    and Hamiltonians to describle a line defect in the system. Finally, it will 
+    return the new wave function and the new Hamiltonians. 
+    
     
     Inputs
     -----------
@@ -19,6 +28,9 @@ def linedefect(p,m,n,psi,LISTH):
     
     n : integer
         Number of atoms along the y-direction
+        
+    psi : 
+        The wave function
         
     LISTH: list
         A list containing four original Hamiltonians
@@ -40,12 +52,16 @@ def linedefect(p,m,n,psi,LISTH):
     
     #Generate a new wave-packet with the values of the pth column to be zero.  
     psinew=psi
-    psinew[(p-1)*n:p*n]=0
+    psinew[(p-1)*n:p*n]=0+0j
     
     #Generate a new set of Hamiltonian with the values of the pth column to be zero.
     ListHnew=LISTH
     for i in ListHnew:
-        i[0:3,(p-1)*n:p*n]=0
+        if ListHnew.index(i)<=1:
+            i[0:3,(p-1)*n:p*n]=0+0j
+        else:
+            i[0:3,(p-1):n*m:m]=0+0j
+        
         
     return psinew, ListHnew
     
