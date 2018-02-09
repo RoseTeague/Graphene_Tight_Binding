@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Module for 2D correlated Gaussian disorder potential on square lattice
 """
@@ -31,6 +30,11 @@ def twoDdisorderpotential(m,n,lc,pos):
     Wfinal: float, array
          The final potential at each atom
     """
+    
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(lc) is float or int, "The correlation length must be numeric"
+    assert type(pos) is list, "The pos must be a list"
 
     #Exctracting each unique x position.
     X = pos[0]
@@ -83,6 +87,13 @@ def twoDdisorderpotential(m,n,lc,pos):
 
     return Wfinal
 
-#if __name__ == "__main__":
-    #Need to import and call crystal here ... 
-    #twoDdisorderpotential(5,5,10,pos)
+if __name__ == "__main__":
+    from DD_WP_S import Crystal
+
+    n = 10
+    m = 10
+
+    pos = Crystal(m,n)
+
+    twoDdisorderpotential(m,n,10,pos)
+
