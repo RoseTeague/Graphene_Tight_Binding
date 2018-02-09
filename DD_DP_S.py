@@ -5,8 +5,6 @@ Module for correlated Gaussian disorder potential on square lattice
 """
 
 import numpy as np
-import DD_WP_S
-from DD_WP_S import *
 
 def oneDdisorderpotential(m,n,lc,pos):
     """
@@ -58,10 +56,19 @@ def oneDdisorderpotential(m,n,lc,pos):
     W=np.dot(L,V)
 
     #Reshape the vector into a column for further calculations.
-    Wf[:,0:m]=W
-    Wfinal=Wf.T.reshape((n*m,1))
+    Wf=np.zeros((n,m))
+    Wf[:,0:m] = W
+    Wfinal = Wf.T.reshape((n*m,1))
 
     return Wfinal
 
 if __name__ == "__main__":
-    oneDdisorderpotential(10,10)
+
+    from DD_WP_S import Crystal
+
+    n = 10
+    m = 10
+
+    pos = Crystal(m,n)
+
+    oneDdisorderpotential(m,n,10,pos)
