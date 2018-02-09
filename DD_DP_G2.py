@@ -21,6 +21,9 @@ def twoDdisorderpotential(m,n,lc,pos):
 
     lc : float
         correlation length
+        
+    
+    
 
     Returns
     -------
@@ -31,7 +34,7 @@ def twoDdisorderpotential(m,n,lc,pos):
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
     assert type(lc) is float or int, "The correlation length must be numeric"
-    
+    assert type(pos) is list, "The pos must be a list"
 
 
     #Exctracting each unique x position.
