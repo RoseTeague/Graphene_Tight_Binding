@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Module for Tight-Binding Hamiltonian for the graphene with line defects
 """
