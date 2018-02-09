@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Module for correlated Gaussian disorder potential on square lattice
 """
@@ -22,6 +21,9 @@ def oneDdisorderpotential(m,n,lc,pos):
 
     lc : float
         correlation length
+        
+    pos: list
+        A list containing position information of atoms
 
     Returns
     -------
@@ -29,7 +31,11 @@ def oneDdisorderpotential(m,n,lc,pos):
          The final potential at each x position
 
     """
-
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(lc) is float or int, "The correlation length must be numeric"
+    assert type(pos) is list, "The pos must be a list"
+    
     #Exctracting each unique x position.
     X = pos[0]
     x = X[0:n*m:n,0]
