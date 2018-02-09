@@ -57,15 +57,19 @@ def oneDdisorderpotential(m,n,lc,pos):
     W2 = np.dot(L2,V)
 
     #Reshaping for further calculations.
-    Wf=np.zeros(n,m)
-    Wf[0:n:2,0:m]=W1 
+    Wf=np.zeros((n,m))
+    Wf[0:n:2,0:m]=W1
     Wf[1:n:2,0:m]=W2
     Wfinal=Wf.T.reshape((n*m,1))
-
+    
     return Wfinal
 
-#if __name__ == "__main__":
-    #Need to import and call crystal here ...
-    #DP = oneDdisorderpotential(10,10,10,pos)
-    #plt.plot(DP)
-    #plt.show()
+if __name__ == "__main__":
+    from DD_WP_G import Crystal
+
+    n = 10
+    m = 10
+
+    pos = Crystal(m,n)
+
+    oneDdisorderpotential(m,n,10,pos)
