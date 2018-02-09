@@ -21,8 +21,9 @@ def twoDdisorderpotential(m,n,lc,pos):
 
     lc : float
         correlation length
-        
     
+    pos: list
+        A list containing position information of atoms
     
 
     Returns
