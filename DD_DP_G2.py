@@ -86,6 +86,14 @@ def twoDdisorderpotential(m,n,lc,pos):
 
     return Wfinal
 
-#if __name__ == "__main__":
-    #Need to import and call crystal here ... 
-    #twoDdisorderpotential(5,5,10,pos)
+if __name__ == "__main__":
+    from DD_WP_G import Crystal
+
+    n = 10
+    m = 10
+
+    pos = Crystal(m,n)
+
+    twoDdisorderpotential(m,n,10,pos)
+
+    
