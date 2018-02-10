@@ -3,6 +3,8 @@ Module to create a 2-Dimensional Gaussian Wavepacket at t=0
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+
 
 def Crystal(m=20, n=10):
     """
@@ -34,6 +36,9 @@ def Crystal(m=20, n=10):
     -----------
     a : float
         Lattice size parameter of graphene
+    d_x : changes in x direction between carbon atoms
+    d_y : changes in y direction between carbon atoms
+    
 
     Returns
     ----------
@@ -147,12 +152,13 @@ def Psi(s, kx, ky, m, n, pos):
 
     return Psi
 
-if __name__ == "__main__":
-    pos = Crystal(100,100)
-    Psi = Psi(14, 0.1, 0.1, 100, 100, pos)
-    X,Y,X0,Y0 = pos
-    pd = np.abs(Psi)**2
-    plt.contourf(X.reshape((100,100)),Y.reshape((100,100)),pd.reshape((100,100)),100, cmap = 'gnuplot')
-    plt.plot(X,Y,'bo',markersize = 0.2)
-    plt.plot(X0,Y0,'ro',markersize = 0.2)
-    plt.show()
+#if __name__ == "__main__":
+#    pos = Crystal(100,100)
+#    Psi = Psi(14, 0.1, 0.1, 100, 100, pos)
+#    X,Y,X0,Y0 = pos
+#    pd = np.abs(Psi)**2
+#    plt.contourf(X.reshape((100,100)),Y.reshape((100,100)),pd.reshape((100,100)),100, cmap = 'gnuplot')
+#    plt.plot(X,Y,'bo',markersize = 0.2)
+#    plt.plot(X0,Y0,'ro',markersize = 0.2)
+#    plt.show()
+DD_WP_G(sys.argv[1])
