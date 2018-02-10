@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Module for 2 D problem
 """
 
@@ -7,54 +8,100 @@ from scipy import sparse
 
 def FTBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
     """
+    ============================================================================
+                Full Tight Binding Hamiltonian of Square Lattice
+    ============================================================================
+
+    Function that creates full hamiltonian of a square lattice to apply in the time
+    propogation operator.
+
+    It is advised that the following paper is consulted for guidance: H. J.
+    Korsch and K. Rapedius, Computations in quantum mechanics made easy,
+    Eur. Phys. J., 2016, 37, 055410.
+
+    The main diagonal of the hamiltonian contains the on-site energy, which has
+    been set to zero for simplicity, and the disorder potential, if present. The
+    off-diagonal elements contain hopping integarls. There are a total of 4
+    diagonals off of the main diagonal. The two imediately adjacent to the
+    main diagonal describe the hopping up and down a column of atoms. While
+    the diagonals displaced by n from the main are the ones associated with
+    hopping left and right along a row of atoms.
+
+    Inputs
+    ------
+    DP - array,
+        disorder potential imported from DD_DP_S
+
+    n - int,
+        number of rows of carbon atoms
+
+    m - int,
+        number of columns of carbon atoms
+
+    dt - float or int,
+        time step in seconds
+
+    V - string,
+        determines what type of external potential should be included
+
+    Parameters
+    ----------
+    HI - float,
+        hopping integral of carbon in graphene
+
+    Returns
+    -------
+    H - sparse matrix,
+        Hamiltonian of graphene saved in sparse form
+
     """
 
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(V) is str, "The specification for the potential must be a string"
+    assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
+    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns"
+    assert type(dt) is float or int, "The time step must be numeric"
 
+    #Total number of carbon atoms.
     N = n*m
+
     #Hopping integral in eV puts matrix elements in with sensible numbers
     HI = -2.7
 
     #Constants that populate the off diagonal elements of the hamiltonian
     H_1 = (HI*1j*constants.e*dt)/constants.hbar
-
     H_V = 1j*constants.e*dt/constants.hbar
-    #Constructing the set of tridiagonal matrices for H_m
-    #H = np.zeros((3,n),dtype=complex)
 
+    #Constructing the main diagonal
     H_d = np.full(N,0,dtype=complex)
 
-    if V == 'one dimensional':
+    if V == 'one dimensional' or V == 'two dimensional':
 
-        #Initial counters are required to populate Hamiltonian
-        ip = 0
-        fp = n
+        H_d = - H_V*DP
 
-        #Need to loop over each column of carbon atoms to set the disorder potential
-        for j in range(m):
+    #Off diagonal elements adjacent to main diagonal
+    H_cd = np.full(N-1,-H_1,dtype=complex)
+    H_cd[n-1:N:n] = 0
 
-            H_d[ip:fp] = H_V*DP[j,0]
-            H_d[ip:fp] = H_V*DP[j,0]
-
-            ip += n
-            fp += n
-            
-    elif V == 'two dimensional':
-        H_d = H_V*DP
-
-    #Need to add a part in for the two dimensional part ... file needs to be written first!
-
-    H_cd_u = np.full(N-1,-H_1,dtype=complex)#.reshape((n*m-1,1))
-    H_cd_l = np.full(N-1,-H_1,dtype=complex)
-
-    #need to check these ... might not actually need two of these ...
-    H_cd_u[n-1:N:n] = 0
-    H_cd_l[n-1:N:n] = 0
-
-    #need to set every other one of these to zero ...
-
+    #Off diagonal elements n awayy from main diagonal
     H_rd = np.full(n*m-n,-H_1)
 
-    H = sparse.csr_matrix(np.diag(H_d, 0) + np.diag(H_rd, -n) + np.diag(H_rd, n) + np.diag(H_cd_l, -1) + np.diag(H_cd_u, 1))
+    #Constructing full hamiltonian and saving in sparse form
+    H = sparse.csr_matrix(np.diag(H_d, 0) + np.diag(H_rd, -n) + np.diag(H_rd, n) + np.diag(H_cd, -1) + np.diag(H_cd, 1))
 
     return H
+
+if __name__ == "__main__":
+    from DD_WP_S import Crystal
+    from DD_DP_S import oneDdisorderpotential
+
+    n = 4
+    m = 4
+    lc = 5
+
+    pos = Crystal(m,n)
+    DP = oneDdisorderpotential(m,n,lc,pos)
+
+    H = FTBH(DP, n, m, dt=0.1e-15, V='one dimensional')
+    print(H)
