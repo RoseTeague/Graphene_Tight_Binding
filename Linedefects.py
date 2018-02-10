@@ -58,9 +58,9 @@ def linedefect(p,m,n,psi,LISTH):
     ListHnew=LISTH
     for i in ListHnew:
         if ListHnew.index(i)<=1:
-            i[0:3,(p-1)*n:p*n]=0+0j
+            i[0:2,(p-1)*n:p*n]=0+0j
         else:
-            i[0:3,(p-1):n*m:m]=0+0j
+            i[0:2,(p-1):n*m:m]=0+0j
         
         
     return psinew, ListHnew
