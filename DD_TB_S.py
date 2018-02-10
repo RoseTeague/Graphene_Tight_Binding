@@ -1,4 +1,5 @@
-"""Module for solver of with TB split operator
+#!/usr/bin/env python3
+"""Module for split operator solver of with tight-binding hamiltonian
 """
 
 import numpy as np
@@ -8,34 +9,54 @@ import scipy.linalg
 def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
     """
     ============================================================================
-        Split operator technique for propogation of a wave packet with
-                            tight-binding hamiltonian.
+        Split Operator Technique for Propogation of a Wave Packet with
+                            Tight-Binding Hamiltonian.
     ============================================================================
 
-        ... it is suggested that you read ... section ... before using this
-        function so that it becomes clear how the calculation is being performed
-        ...
+    Function that takes the wavef packet and hamiltonian (on a square or graphene
+    lattice - the solver is generic) and uses the split operator technique to
+    efficiently propogate the wave packet.
+
+    It is advised that the following paper is consulted for guidance: A. Chaves,
+    L. Covaci, Kh. Yu. Rakhimov, G. A. Farias and F. M. Peeters, Wave packet
+    dynamics and valley filter in strained graphene, Phys. Rev. B, 82, 2010,
+    205430. DOI:https://doi.org/10.1103/PhysRevB.82.205430
+
+    Initially, the wave packet and trigdiagonal matrices that form the hamiltonain
+    are imported and arrays are created for populating. For each time step the
+    wave packet must be multiplied by the hamiltonian matrix (column form to start)
+    and then the linear equation is solved. The resulting vector is then reshaped
+    (into a row form) to permit the second multiplication and solution to the
+    linear equation. Fianlly, the vector is reshaped (back to the column form),
+    multiplied by a matrix again and the linear equation is solved to yield the
+    wave packet at the next time step.
 
     Inputs
     ------
-    n - int, number of rows of carbon atoms
+    n - int,
+        number of rows of carbon atoms
 
-    m - int, number of columns of carbon atoms
+    m - int,
+        number of columns of carbon atoms
 
-    pos -
+    pos - array (n*m,1),
+        positions of all atoms for plotting
 
-    wvf -
+    wvf - arrary (n*m,1),
+        wavefunction at each atom
 
-    DP - ... does this actully need to take DP .. ? I do not think so ...
+    H - four arrays from DD_GH or DD_SH,
+        tridiagonal matrices (3,n*m) for hopping in columns and rows for split
+        operator technique
 
-    H -
+    T - float or int,
+        duration of calculation in seconds
 
-    T -
-
-    dt - float, time step in seconds
+    dt - float or int,
+        time step in seconds
 
     video - boolean,
-        determines if there is an external potential
+        determines if a video is produced
 
 
     Returns
@@ -43,13 +64,18 @@ def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
     pd - array,
         vector of probability density on each atomic site
 
+    video - mp4,
+        movie of wave packet propogation
+
     """
 
-    #need to add some assert statements ...
-    #T needs to be a number
-    #video needs to be a boolean
-
-    #might want to check the sizes of each of the inputs ... ?
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
+    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns"
+    assert type(dt) is float or int, "The time step must be numeric"
+    assert type(T) is float or int, "The duration of the calculation must be numeric"
+    assert type(video) is bool, "video must be a boolean"
 
     #Number of time steps to be taken.
     Ns = int(T/dt) + 1
@@ -58,7 +84,6 @@ def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
     N = n*m
 
     #Importing hamiltonain from module. Exctract the different matrices.
-    #can we compress this ... ? 
     TH1P = H[0]
     TH1N = H[1]
     TH2P = H[2]
@@ -109,7 +134,7 @@ def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
         xi_p[-1] = TH1N[1,-1]*xi_c[-1] + TH1N[2,-2]*xi_c[-2]
         xi_p[1:N-1] = np.multiply(TH1N0, xi_c[2:N]) + np.multiply(TH1N1, xi_c[1:N-1]) + np.multiply(TH1N2, xi_c[0:N-2])
 
-        #Solving for wavefunction
+        #Solving for wavefunction at next time step
         wvf = scipy.linalg.solve_banded((1,1), TH1P, xi_p)
 
         if video:
@@ -130,8 +155,8 @@ def TB_solver_S(n, m, pos, wvf, H, T, dt, video=False):
     #Calculate conjugate wave function
     wvf_conj = np.conjugate(wvf)
 
-    #Probability density function by element wise multiplication
-    #Neglect imaginary part
+    #Probability density function by element wise multiplication.
+    #Neglect imaginary part.
     pd = np.multiply(wvf_conj,wvf)
     pd = np.reshape(pd,(n,m))
 
