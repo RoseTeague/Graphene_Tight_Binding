@@ -1,18 +1,33 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Module for correlated Gaussian disorder potential on square lattice
 """
 
 import numpy as np
-import DD_WP_S
-from DD_WP_S import *
 
 def oneDdisorderpotential(m,n,lc,pos):
     """
     ============================================================================
     Create one-dimensional disorder potentials on square/rectangular lattice
     ============================================================================
+    
+    This function creates an one-dimensional spatially-correlated Gaussian 
+    disorder potential for a square/rectangular lattice. The method used is the same as that 
+    in the paper: Choi, SangKook, Cheol-Hwan Park, and Steven G. Louie. 
+    "Electron supercollimation in graphene and Dirac Fermion materials 
+    using one-dimensional disorder potentials." 
+    Physical review letters 113.2 (2014): 026802. 
+    
+    
+    To be clearer, the one-dimensional spatially-correlated Gaussian disorder 
+    potential can be in the form of a random vector having the two-point 
+    spatial correlation property. Hence, firstly, a random vector consisting of 
+    spatially-uncorrelated Gaussian-random variables is composed. Next, using the 
+    positions of atoms taken as input parameters, the two-point spatial correlation
+    matrix is created and Cholesky decomposition method is used to obtain the 
+    matrix with desired spatial correlation property. Finally, the final vector 
+    is the dot product of the random vector and matrix with the required spatial 
+    correlation property.
 
     Inputs
     ----------
@@ -24,6 +39,9 @@ def oneDdisorderpotential(m,n,lc,pos):
 
     lc : float
         correlation length
+        
+    pos: float, list
+        A list containing position information of atoms
 
     Returns
     -------
@@ -31,7 +49,11 @@ def oneDdisorderpotential(m,n,lc,pos):
          The final potential at each x position
 
     """
-
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(lc) is float or int, "The correlation length must be numeric"
+    assert type(pos) is list, "The pos must be a list"
+    
     #Exctracting each unique x position.
     X = pos[0]
     x = X[0:n*m:n,0]
@@ -58,9 +80,19 @@ def oneDdisorderpotential(m,n,lc,pos):
     W=np.dot(L,V)
 
     #Reshape the vector into a column for further calculations.
-    Wfinal=W.reshape((m,1))
+    Wf=np.zeros((n,m))
+    Wf[:,0:m] = W
+    Wfinal = Wf.T.reshape((n*m,1))
 
     return Wfinal
 
 if __name__ == "__main__":
-    oneDdisorderpotential(10,10)
+
+    from DD_WP_S import Crystal
+
+    n = 10
+    m = 10
+
+    pos = Crystal(m,n)
+
+    oneDdisorderpotential(m,n,10,pos)

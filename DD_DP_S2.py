@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Module for 2D correlated Gaussian disorder potential on square lattice
 """
@@ -11,7 +10,28 @@ def twoDdisorderpotential(m,n,lc,pos):
     ============================================================================
     Create two-dimensional disorder potential on square lattice
     ============================================================================
-
+    
+    
+    This function creates an two-dimensional spatially-correlated Gaussian 
+    disorder potential for a square/rectangular lattice. The method used is the 
+    same as that in the paper: Choi, SangKook, Cheol-Hwan Park, and Steven G. Louie. 
+    "Electron supercollimation in graphene and Dirac Fermion materials 
+    using one-dimensional disorder potentials." 
+    Physical review letters 113.2 (2014): 026802. 
+    
+    
+    To be clearer, the two-dimensional spatially-correlated Gaussian disorder 
+    potential can be the sum of two one-dimensional potentials respectively along x
+    and y axis. The one-dimensional potential can be in the form of a random vector 
+    having the two-point spatial correlation property. Hence, firstly, a random vector 
+    consisting of spatially-uncorrelated Gaussian-random variables is composed. 
+    Next, using the positions of atoms taken as input parameters, the two-point
+    spatial correlation matrix is created and Cholesky decomposition method is 
+    used to obtain the matrix with desired spatial correlation property. Finally, 
+    the final vector is the dot product of the random vector and matrix with the 
+    required spatial correlation property.
+    
+    
     Inputs
     ----------
     m : integer
@@ -31,6 +51,11 @@ def twoDdisorderpotential(m,n,lc,pos):
     Wfinal: float, array
          The final potential at each atom
     """
+    
+    assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
+    assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(lc) is float or int, "The correlation length must be numeric"
+    assert type(pos) is list, "The pos must be a list"
 
     #Exctracting each unique x position.
     X = pos[0]
@@ -83,6 +108,13 @@ def twoDdisorderpotential(m,n,lc,pos):
 
     return Wfinal
 
-#if __name__ == "__main__":
-    #Need to import and call crystal here ... 
-    #twoDdisorderpotential(5,5,10,pos)
+if __name__ == "__main__":
+    from DD_WP_S import Crystal
+
+    n = 10
+    m = 10
+
+    pos = Crystal(m,n)
+
+    twoDdisorderpotential(m,n,10,pos)
+

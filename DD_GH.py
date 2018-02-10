@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Module for Tight-Binding Hamiltonian of Graphene
 """
 
@@ -5,98 +6,106 @@ import numpy as np
 from scipy import constants
 
 def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
-    """Function that creates Hamiltonians of graphene for the split operator
-    technique. The number of rows and columns is all that is required to
-    construct the matrices. These matrices are prepared in tridiagonal form
-    for efficient calculations in the split operator technique.
+    """
+    ============================================================================
+            Tight Binding Hamiltonian of Graphene in Tridiagonal Form
+    ============================================================================
 
-    ... need to actually explain what is going on ...
+    Function that creates Hamiltonian of graphene. These matrices are prepared
+    in tridiagonal form for efficient calculations in the split operator technique.
+
+    It is advised that the following paper is consulted for guidance: A. Chaves,
+    L. Covaci, Kh. Yu. Rakhimov, G. A. Farias and F. M. Peeters, Wave packet
+    dynamics and valley filter in strained graphene, Phys. Rev. B, 82, 2010,
+    205430. DOI:https://doi.org/10.1103/PhysRevB.82.205430
+
+    The full graphene Hamiltonian is split into two contriubtions: one from
+    hopping up and down columns of carbon atoms (TH1N and TH1P), and another
+    from hopping left and right along rows of carbon atoms (TH2N and TH2P).
+    Both of these can be written in a tridiagonal form if the wavefunction
+    is reshuffeled between calculations.
+
+    The main diagonal of these tridagonal matrices describe the on-site energy
+    and any external potentials that are present. The reference energy of the
+    p-orbital of carbon in graphene is set to zero here for simplicity. In the
+    absence of a potential, then, there is only a 1 along the diagonal.
+
+    The off diagonal elements contain the hopping integral contributions. For
+    columns it is relatively simple: each carbon atom, apart from the first and
+    last in the column, has a carbon atom above and below it. Hence, there
+    are blocks of hopping integral terms, of length n-1 on the off diagonal.
+    Between these blocks there is a zero since the last element of one column
+    does not talk to the first element of the next column. For the rows the
+    structure of the off diagonal elements appear in these blocks again, but
+    every other element of the matrix is zero, owing to the hexagonal structure
+    of graphene.
 
     Inputs
     ------
-    n - int, number of rows of carbon atoms
+    n - int,
+        number of rows of carbon atoms
 
-    m - int, number of columns of carbon atoms
+    m - int,
+        number of columns of carbon atoms
 
-    dt - float, time step in seconds
+    dt - float or int,
+        time step in seconds
 
-    V - boolean, determines if there is an external potential
+    V - string,
+        determines what type of external potential should be included
 
     Parameters
     ----------
-    HI - float, hopping integral of carbon
+    HI - float,
+        hopping integral of carbon in graphene
 
     Returns
     -------
-    TH1P - 3x(n*m) matrix, tridiagonal matrix for H_m of split operator technique.
-            Positive version in the linear equation.
+    TH1P - 3x(n*m) matrix,
+        tridiagonal matrix for H_m of split operator technique. Positive version
+        in the linear equation.
 
-    TH1N - 3x(n*m) matrix, tridiagonal matrix for H_m of split operator technique
-            Negative version in the linear equation.
+    TH1N - 3x(n*m) matrix,
+        tridiagonal matrix for H_m of split operator technique. Negative version
+        in the linear equation.
 
-    TH2P - 3x(n*m) matrix, tridiagonal matrix for H_n of split operator technique
-            Positive version in the linear equation.
+    TH2P - 3x(n*m) matrix,
+        tridiagonal matrix for H_n of split operator technique. Positive version
+        in the linear equation.
 
-    TH2N - 3x(n*m) matrix, tridiagonal matrix for H_n of split operator technique
-            Negative version in the linear equation.
+    TH2N - 3x(n*m) matrix,
+        tridiagonal matrix for H_n of split operator technique. Negative version
+        in the linear equation.
 
     """
 
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
+    assert type(V) is str, "The specification for the potential must be a string"
     assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
     assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns"
+    assert type(dt) is float or int, "The time step must be numeric"
 
-    #Total number of carbon atoms
+    #Total number of carbon atoms.
     N = n*m
 
-    #Hopping integral in eV puts matrix elements in with sensible numbers
+    #Hopping integral in eV puts matrix elements in with sensible numbers.
     HI = -2.7
 
-    #Constants that populate the off diagonal elements of the hamiltonian
+    #Constants that populate the off diagonal elements of the hamiltonian.
     H_1 = (HI*1j*constants.e*dt*0.25)/constants.hbar
     H_2 = (HI*1j*constants.e*dt*0.5)/constants.hbar
 
-    #Constant that multiplies the disorder potential on the diagonal element
+    #Constant that multiplies the disorder potential on the diagonal element.
     H_V = (1j*constants.e*dt*0.5)/constants.hbar
 
     #Constructing the set of tridiagonal matrices for H_m
     TH1P = np.zeros((3,N),dtype=complex)
     TH1N = np.zeros((3,N),dtype=complex)
 
-    #Setting diagonal elements of TH1P and TH1N
-    if V == 'one dimensional':
-
-        #Initial counters are required to populate Hamiltonian
-        ip = 0
-        fp = n
-
-        #Need to loop over each column of carbon atoms to set the disorder potential
-        for j in range(m):
-
-            #The even and odd column numbers are populated from the disorder potential
-            #differently, because the atoms are in a zig zag.
-            if j % 2 == 0:
-
-                TH1P[1,ip:fp:2] = 1 + 0.25*H_V*DP[2*j+1,0]
-                TH1N[1,ip:fp:2] = 1 - 0.25*H_V*DP[2*j+1,0]
-
-                TH1P[1,ip+1:fp+1:2] = 1 + 0.25*H_V*DP[2*j,0]
-                TH1N[1,ip+1:fp+1:2] = 1 - 0.25*H_V*DP[2*j,0]
-
-            else:
-
-                TH1P[1,ip:fp:2] = 1 + 0.25*H_V*DP[2*j,0]
-                TH1N[1,ip:fp:2] = 1 - 0.25*H_V*DP[2*j,0]
-
-                TH1P[1,ip+1:fp+1:2] = 1 + 0.25*H_V*DP[2*j+1,0]
-                TH1N[1,ip+1:fp+1:2] = 1 - 0.25*H_V*DP[2*j+1,0]
-
-            #conting to the next set of atoms
-            ip += n
-            fp += n
-
-    elif V == 'two dimensional':
+    #Setting diagonal elements of TH1P and TH1N. If there is a disorder potenital
+    #then it is included here.
+    if V == 'one dimensional' or V == 'two dimensional':
 
         TH1P[1,:] = 1 + 0.25*H_V*DP.reshape((1,N))
         TH1N[1,:] = 1 - 0.25*H_V*DP.reshape((1,N))
@@ -120,35 +129,15 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
     TH1P[2,n-1:N:n] = 0
     TH1N[2,n-1:N:n] = 0
 
-    #Construct the set of tridiagonal matrices for H_n
+    #Construct the set of tridiagonal matrices for H_n.
     TH2P = np.zeros((3,N),dtype=complex)
     TH2N = np.zeros((3,N),dtype=complex)
 
-    #Setting diagonal elements
-    if V == 'one dimensional':
-
-        ip = 0
-        fp = m
-
-        for j in range(n):
-
-            if j % 2 == 0:
-
-                TH2P[1,ip:fp] = 1 + H_V*DP[0:2*m:2,0]
-                TH2N[1,ip:fp] = 1 - H_V*DP[0:2*m:2,0]
-
-            else:
-
-                TH2P[1,ip:fp] = 1 + H_V*DP[1:2*m:2,0]
-                TH2N[1,ip:fp] = 1 - H_V*DP[1:2*m:2,0]
-
-            ip += m
-            fp += m
-
-    elif V == 'two dimensional':
+    #Setting diagonal elements.
+    if V == 'one dimensional' or V == 'two dimensional':
 
         DP = DP.reshape((n,m)).T.reshape((N,1))
-        #might not need to do all of these reshapes ...
+
         TH2P[1,:] = 1 + H_V*DP.reshape((1,N))
         TH2N[1,:] = 1 - H_V*DP.reshape((1,N))
 
@@ -163,15 +152,12 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
     ip = 1
     fp = m
 
-    #looping over each row
-    #also need to add a satement in for if there are an odd or even number of rows ... ?
-    #because the number of non-zero elements changes ...
-
+    #looping over each row.
     for i in range(n):
 
         if i % 2 == 0:
 
-            #Populate off-diagonal elements for odd rows
+            #Populate off-diagonal elements for odd rows.
             TH2P[0,ip:fp:2] = H_2
             TH2N[0,ip:fp:2] = -H_2
             TH2P[2,ip-1:fp-1:2] = H_2
@@ -179,20 +165,28 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
 
         else:
 
-            #Populate off-diagonal elements for even rows
+            #Populate off-diagonal elements for even rows.
             TH2P[0,ip+1:fp-1:2] = H_2
             TH2N[0,ip+1:fp-1:2] = -H_2
             TH2P[2,ip:fp-1:2] = H_2
             TH2N[2,ip:fp-1:2] = -H_2
 
-        #Update initial and final points
+        #Update initial and final points.
         ip += m
         fp += m
 
-    #also need to work out if we can do periodic boundary conditions ...
-
-    #return matrix forms of hamiltonians for split operator technique
+    #return matrix forms of hamiltonians for split operator technique.
     return TH1P, TH1N, TH2P, TH2N
 
-#if __name__ == "__main__":
-    #TBH(5,5,dt=0.1e-15,V='one dimensional')
+if __name__ == "__main__":
+    from DD_WP_G import Crystal
+    from DD_DP_G import oneDdisorderpotential
+
+    n = 4
+    m = 4
+    lc = 5
+
+    pos = Crystal(m,n)
+    DP = oneDdisorderpotential(m,n,lc,pos)
+
+    TBH(DP, 5, 5, dt=0.1e-15, V='one dimensional')
