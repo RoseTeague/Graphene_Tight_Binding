@@ -9,7 +9,7 @@ Uses a split Hamiltonian approach to produce fast results and is capable of crea
 ## 1. Setup
 
 This script is written in python 3 and uses pre-installed modules
-(numpy, matplotlib, scipy) and the cv2 module, installation instruction below. 
+(numpy, matplotlib, scipy) and the cv2 module, installation instructions below. 
 
 All modules for the **crystal structure**, **initial wavepacket**,
 **Tight Binding Hamiltonian**, and **solvers** have been included for
@@ -25,7 +25,7 @@ necessary for producing the video files.
 pip install opencv-python
 ```
 
-**Create an empty folder called Images into the work directory**
+You will also need to create an empty folder called Images into your work directory
 
 ## 2. Split Operator Method
 
