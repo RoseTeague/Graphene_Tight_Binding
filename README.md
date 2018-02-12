@@ -196,15 +196,21 @@ To test the program is working correctly, complete the following steps:
 1. Follow installation instructions provided in section 1.
 2. Open a unix terminal and run the command
   ```
-  chmod -x Main.py
+  chmod +x DD_test.py
   ```
   This will make the program executable.
 3. In your terminal, run the command
   ```
-  ./ Main.py
+  ./DD_test.py
   ```
-  This will run the code with the example parameters. You should see a pop-up
-  with the following image:
+  This will run a test code to produce a gaussian packet on a square lattice. If working correctly 
+  two lists will be output to the terminal and an image should appear. The first list is the coordinates and
+  corresponding values of the hamiltonian, the second list is the vector representing the disorder potential,
+  and the image will display a 2D-Gaussian on a square grid, as shown below: 
+  
+  ![alt text](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/test.png "Initial guassian on a square lattice")
+  
+  
 
 ## 6. Credits
 This program was written as a part of the Computational Methods course for the
