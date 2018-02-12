@@ -70,14 +70,14 @@ described.
 
 ##### Example: Square Lattice; m=4, n=4
 o  o  o  o  
-o  o  o  o
-o  o  o  o
-**o**  o  o  o  
+o  o  o  o  
+o  o  o  o  
+**o**  o  o  o    
 
-X  = [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3]
-Y  = [0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3]
-X0 = 0
-Y0 = 3
+X  = [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3]  
+Y  = [0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3]  
+X0 = 0  
+Y0 = 3  
 
 ### Psi
 Describes the initial wavepacket to be propagated through the system. This
@@ -98,10 +98,10 @@ position on the lattice, again moving down each column from left to right.
           elements moving from top left to bottom right
 
 ##### Example : Square Lattice; m=4, n=4
+o  o  o  o    
 o  o  o  o  
-o  o  o  o
-o  o  o  o
-**o**  o  o  o   
+o  o  o  o  
+**o**  o  o  o     
 
 Psi = [[0,0,1,5,  0,0,0,1,  0,0,0,0,  0,0,0,0]]
 
