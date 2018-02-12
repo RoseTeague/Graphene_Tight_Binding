@@ -41,8 +41,8 @@ def oneDdisorderpotential(m,n,lc,pos):
     lc : float
         correlation length
     
-    pos: float, list
-        A list containing position information of atoms
+    pos: float, tuple
+        A tuple containing position information of atoms
 
     Returns
     -------
@@ -53,7 +53,7 @@ def oneDdisorderpotential(m,n,lc,pos):
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
     assert type(lc) is float or int, "The correlation length must be numeric"
-    assert type(pos) is list, "The pos must be a list"
+    assert type(pos) is tuple, "The pos must be a tuple"
     
     #Exctracting each unique x position.
     X = pos[0]
