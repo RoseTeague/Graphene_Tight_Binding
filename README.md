@@ -187,7 +187,7 @@ hamiltonian as a sum allows the exponential to be factorised into 3 terms; the
 first and last depend on the vertical hopping, while the central term depends on
 the lateral hopping. Each exponential can then be written in Cayley form and
 solved as an eigenvalue problem. This requires a certain amount of restructuring
-of the matrices which is described in more detail in the doc string of [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/DD_TB_S).
+of the matrices which is described in more detail in the doc string of [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py).
 
 This equation is solved for each time step, updating the input wavefunction each
 time until the final form is obtained.
@@ -197,12 +197,12 @@ To test the program is working correctly, complete the following steps:
 
 1. Follow installation instructions provided in section 1.
 2. Open a unix terminal and run the command
-  ```ruby
+  ```
   chmod -x Main.py
   ```
   This will make the program executable.
 3. In your terminal, run the command
-  ```ruby
+  ```
   ./ Main.py
   ```
   This will run the code with the example parameters. You should see a pop-up
@@ -222,5 +222,5 @@ It was written by:
 ## 7. License
 GNU LESSER General Public License. Copyright 2007.
 
-Under this [license](https://gitlab.com/RoseTeague/Group_Programming_Project/LICENSE), everyone is permitted to copy and distribute verbatim copies
+Under this [license](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/LICENSE), everyone is permitted to copy and distribute verbatim copies
 of this document, but changing it is not allowed.
