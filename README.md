@@ -57,15 +57,15 @@ described.
 
 *Inputs*
 
-m - number of atoms along the x direction
-n - number of atoms along the y direction
+* m - number of atoms along the x direction.
+* n - number of atoms along the y direction.
 
 *Returns*
 
-X   - complete list of atomic x-positions
-Y   - complete list of atomic y-positions
-X_0 - initial x-position of the centre of the wavepacket
-Y_0 - initial y-position of the centre of the wavepacket
+* X   - complete list of atomic x-positions.
+* Y   - complete list of atomic y-positions.
+* X_0 - initial x-position of the centre of the wavepacket.
+* Y_0 - initial y-position of the centre of the wavepacket.
     *N.B - X_0 and Y_0 __must__ be atomic positions*
 
 ##### Example: Square Lattice; m=4, n=4
@@ -86,15 +86,15 @@ position on the lattice, again moving down each column from left to right.
 
 *Inputs*
 
-s     - width of gaussian Wavepacket
-kx,ky - wavenumbers along x and y directions
-m     - number of atoms along the x direction
-n     - number of atoms along the y direction
-pos   - output from the Crystal function
+* s     - width of gaussian Wavepacket
+* kx,ky - wavenumbers along x and y directions
+* m     - number of atoms along the x direction
+* n     - number of atoms along the y direction
+* pos   - output from the Crystal function
 
 *Returns*
 
-Psi   - an (n*m)x1 matrix with the value of the wavefunction defined at each atom
+* Psi   - an (n*m)x1 matrix with the value of the wavefunction defined at each atom
           elements moving from top left to bottom right
 
 ##### Example : Square Lattice; m=4, n=4
@@ -112,14 +112,14 @@ at each x-position **or** at each atomic location respectively.
 
 *Inputs*
 
-m      - number of atoms along the x direction
-n      - number of atoms along the y direction
-pos    - output from the Crystal function
-lc     - (optional), the disorder length
+* m      - number of atoms along the x direction
+* n      - number of atoms along the y direction
+* pos    - output from the Crystal function
+* lc     - (optional), the disorder length
 
 *Returns*
 
-Wfinal - value of V at each: x-position
+* Wfinal - value of V at each: x-position
                   **OR**   : atomic location
 
 ### Hamiltonian
@@ -135,35 +135,35 @@ details can be found in the doc strings of DD_FH_G and DD_FH_S.
 
 *Inputs*
 
-DP - disorder potential
-n  - number of rows of carbon atoms
-m  - number of columns of carbon atoms
-dt - time step in seconds
-V  - determines what type of external potential should be included
+* DP - disorder potential
+* n  - number of rows of carbon atoms
+* m  - number of columns of carbon atoms
+* dt - time step in seconds
+* V  - determines what type of external potential should be included
 
 *Returns*
 
-H  - sparse tight binding matrix hamiltonian
+* H  - sparse tight binding matrix hamiltonian
 
 #### Split Operator Hamiltonian
 Describes the complete tight binding hamiltonian as two tri-diagonal matrices.
 Full details can be found in the doc strings of DD_SH and DD_GH.
 
 *Inputs*
-DP - disorder potential
-n  - number of rows of carbon atoms
-m  - number of columns of carbon atoms
-dt - time step in seconds
+* DP - disorder potential
+* n  - number of rows of carbon atoms
+* m  - number of columns of carbon atoms
+* dt - time step in seconds
 
 
 *Returns*
-TH1P - 3x(n*m) tridiagonal matrix for H_m of split operator technique.
+* TH1P - 3x(n*m) tridiagonal matrix for H_m of split operator technique.
         Positive version in the linear equation.
-TH1N - 3x(n*m) tridiagonal matrix for H_m of split operator technique.
+* TH1N - 3x(n*m) tridiagonal matrix for H_m of split operator technique.
         Negative version in the linear equation.
-TH2P - 3x(n*m) tridiagonal matrix for H_n of split operator technique.
+* TH2P - 3x(n*m) tridiagonal matrix for H_n of split operator technique.
         Positive version in the linear equation.
-TH2N - 3x(n*m) tridiagonal matrix for H_n of split operator technique.
+* TH2N - 3x(n*m) tridiagonal matrix for H_n of split operator technique.
         Negative version in the linear equation.
 
 ## 4. Solvers
