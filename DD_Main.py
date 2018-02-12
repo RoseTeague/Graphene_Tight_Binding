@@ -1,10 +1,53 @@
+#!/usr/bin/env python3
 """
 Main program for studying the propagation of a Gaussian wavepacket through 2D
 crystals using the Tight Binding Method.
 """
 
 import math
+import mumpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+
+#Defining the plotting stuff ... this was taken from the following websites. It just puts figures in a nice LaTeX format.
+
+#http://bkanuka.com/articles/native-latex-plots/
+#http://sbillaudelle.de/2015/02/23/seamlessly-embedding-matplotlib-output-into-latex.html
+
+mpl.use('pgf')
+
+def figsize(scale):
+    fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
+    inches_per_pt = 1.0/72.27                       # Convert pt to inch
+    golden_mean = (np.sqrt(5.0)-1)/2.0            # Aesthetic ratio (you could change this)
+    fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
+    fig_height = fig_width*golden_mean              # height in inches
+    fig_size = [fig_width,fig_height]
+    return fig_size
+
+pgf_with_latex = {                      # setup matplotlib to use latex for output
+    "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+    "text.usetex": True,                # use LaTeX to write all text
+    "font.family": "serif",
+    "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+    "font.sans-serif": [],
+    "font.monospace": [],
+    "axes.labelsize": 10,               # LaTeX default is 10pt font.
+    "text.fontsize": 10,
+    "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "figure.figsize": figsize(1),     # default fig size of 0.9 textwidth
+    "pgf.preamble": [
+        r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+        r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+        ]
+    }
+mpl.rcParams.update(pgf_with_latex)
+
+#End of plotting stuff
+
 
 # Describe system for use in image/video titles
 def TB(lattice,V,animate=False):
@@ -61,24 +104,24 @@ def TB(lattice,V,animate=False):
 
 
     # Import the full (fast) Hamiltonian solver
-    from DD_TB_S import TB_solver_S                         # Solver module
+    from solvers.DD_TB_S import TB_solver_S                         # Solver module
 
     if lattice == 'square':
         # Import system modules for Square lattice
-        from DD_WP_S import Crystal                         # Wavefunction module
-        from DD_WP_S import Psi                             # Wavefunction module
-        from DD_DP_S import oneDdisorderpotential           # Potential module
-        from DD_DP_S2 import twoDdisorderpotential          # Potential module
-        from DD_SH import TBH                               # Hamiltonian module
+        from wavepackets.DD_WP_S import Crystal                         # Wavefunction module
+        from wavepackets.DD_WP_S import Psi                             # Wavefunction module
+        from disorder_potentials.DD_DP_S import oneDdisorderpotential           # Potential module
+        from disorder_potentials.DD_DP_S2 import twoDdisorderpotential          # Potential module
+        from hamiltonians.DD_SH import TBH                               # Hamiltonian module
 
 
     if lattice == 'graphene':
         # Import system modules for Graphene (hexagonal) lattice
-        from DD_WP_G import Crystal                         # Wavefunction module
-        from DD_WP_G import Psi                             # Wavefunction module
-        from DD_DP_G import oneDdisorderpotential           # Potential module
-        from DD_DP_G2 import twoDdisorderpotential          # Potential module
-        from DD_GH import TBH                               # Hamiltonian module
+        from wavepackets.DD_WP_G import Crystal                         # Wavefunction module
+        from wavepackets.DD_WP_G import Psi                             # Wavefunction module
+        from disorder_potentials.DD_DP_G import oneDdisorderpotential           # Potential module
+        from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
+        from hamiltonians.DD_GH import TBH                               # Hamiltonian module
 
 
 
@@ -117,9 +160,9 @@ def TB(lattice,V,animate=False):
         pd = TB_solver_S(n,m,pos,wfc,H,T,dt,animate)
 
     #Plotting
-    # plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
-    # plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
-    # plt.show()
+    plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
+    plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
+    plt.show()
 
 def TBS(lattice,V, animate = False):
     """
@@ -176,32 +219,32 @@ def TBS(lattice,V, animate = False):
 
 
     # Import the simple Hamiltonian solver
-    from DD_SS import TB_ss                                 # Solver module
+    from solvers.DD_SS import TB_ss                                 # Solver module
 
 
     if lattice == 'square':
         # Import modules for Square lattice
-        from DD_WP_S import Crystal                         # Wavefunction module
-        from DD_WP_S import Psi                             # Wavefunction module
-        from DD_DP_S import oneDdisorderpotential           # Potential module
-        from DD_DP_S2 import twoDdisorderpotential          # Potential module
-        from DD_FH_S import FTBH                            # Hamiltonian module
+        from wavepackets.DD_WP_S import Crystal                         # Wavefunction module
+        from wavepackets.DD_WP_S import Psi                             # Wavefunction module
+        from disorder_potentials.DD_DP_S import oneDdisorderpotential           # Potential module
+        from disorder_potentials.DD_DP_S2 import twoDdisorderpotential          # Potential module
+        from hamiltonians.DD_FH_S import FTBH                            # Hamiltonian module
 
     if lattice == 'graphene':
         # Import modules for Graphene lattice
-        from DD_WP_G import Crystal                         # Wavefunction module
-        from DD_WP_G import Psi                             # Wavefunction module
-        from DD_DP_G import oneDdisorderpotential           # Potential module
-        from DD_DP_G2 import twoDdisorderpotential          # Potential module
-        from DD_FH_G import FTBH                            # Hamiltonian module
+        from wavepackets.DD_WP_G import Crystal                         # Wavefunction module
+        from wavepackets.DD_WP_G import Psi                             # Wavefunction module
+        from disorder_potentials.DD_DP_G import oneDdisorderpotential           # Potential module
+        from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
+        from hamiltonians.DD_FH_G import FTBH                            # Hamiltonian module
 
     if lattice == '1D square':
         # Import modules for 1D square lattice
-        # Must have no potential for this 1D solver
-        from DD_1D_modified import Crystal                  # Crystal Module
-        from DD_1D_modified import Psi                      # Wavefunction Module
-        from DD_1D_modified import TBH                      # Hamiltonian Module
-        from DD_1D_modified import TB_ss                    # Solver Module
+        # Must have no potential for this 1D solver
+        from other.DD_1D_modified import Crystal                  # Crystal Module
+        from other.DD_1D_modified import Psi                      # Wavefunction Module
+        from other.DD_1D_modified import TBH                      # Hamiltonian Module
+        from other.DD_1D_modified import TB_ss                    # Solver Module
 
 
     # Run the system modules to descibe the lattice and initial wavepacket
