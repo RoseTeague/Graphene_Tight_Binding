@@ -1,9 +1,52 @@
+#!/usr/bin/env python3
+
 """
 Module for comparing the two different solvers
 """
 
 import math
+import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+#Defining the plotting stuff ... this was taken from the following websites. It just puts figures in a nice LaTeX format.
+
+#http://bkanuka.com/articles/native-latex-plots/
+#http://sbillaudelle.de/2015/02/23/seamlessly-embedding-matplotlib-output-into-latex.html
+
+mpl.use('pgf')
+
+def figsize(scale):
+    fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
+    inches_per_pt = 1.0/72.27                       # Convert pt to inch
+    golden_mean = (np.sqrt(5.0)-1)/2.0            # Aesthetic ratio (you could change this)
+    fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
+    fig_height = fig_width*golden_mean              # height in inches
+    fig_size = [fig_width,fig_height]
+    return fig_size
+
+pgf_with_latex = {                      # setup matplotlib to use latex for output
+    "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+    "text.usetex": True,                # use LaTeX to write all text
+    "font.family": "serif",
+    "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+    "font.sans-serif": [],
+    "font.monospace": [],
+    "axes.labelsize": 10,               # LaTeX default is 10pt font.
+    "text.fontsize": 10,
+    "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "figure.figsize": figsize(1),     # default fig size of 0.9 textwidth
+    "pgf.preamble": [
+        r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+        r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+        ]
+    }
+mpl.rcParams.update(pgf_with_latex)
+
+#End of plotting stuff
+
 
 def Comparison(lattice,V):
     """
@@ -51,21 +94,21 @@ def Comparison(lattice,V):
 
     if lattice == 'square':
         # Import modules for square lattice
-        from DD_WP_S import Crystal                         # Wavefunction module
-        from DD_WP_S import Psi                             # Wavefunction module
-        from DD_DP_S import oneDdisorderpotential           # Potential module
-        from DD_DP_S2 import twoDdisorderpotential          # Potential module
-        from DD_SH import TBH                               # Hamiltonian module
-        from DD_FH_S import FTBH                            # Hamiltonian module
+        from wavepackets.DD_WP_S import Crystal                         # Wavefunction module
+        from wavepackets.DD_WP_S import Psi                             # Wavefunction module
+        from disorder_potentials.DD_DP_S import oneDdisorderpotential           # Potential module
+        from disorder_potentials.DD_DP_S2 import twoDdisorderpotential          # Potential module
+        from hamiltonians.DD_SH import TBH                               # Hamiltonian module
+        from hamiltonians.DD_FH_S import FTBH                            # Hamiltonian module
 
     if lattice == 'graphene':
         # Import modules for graphene lattice
-        from DD_WP_G import Crystal                         # Wavefunction module
-        from DD_WP_G import Psi                             # Wavefunction module
-        from DD_DP_G import oneDdisorderpotential           # Potential module
-        from DD_DP_G2 import twoDdisorderpotential          # Potential module
-        from DD_GH import TBH                               # Hamiltonian module
-        from DD_FH_G import FTBH                            # Hamiltonian module
+        from wavepackets.DD_WP_G import Crystal                         # Wavefunction module
+        from wavepackets.DD_WP_G import Psi                             # Wavefunction module
+        from disorder_potentials.DD_DP_G import oneDdisorderpotential           # Potential module
+        from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
+        from hamiltonians.DD_GH import TBH                               # Hamiltonian module
+        from hamiltonians.DD_FH_G import FTBH                            # Hamiltonian module
 
     # Run the system modules to descibe the lattice and initial wavepacket
     pos = Crystal(n,m)
@@ -85,13 +128,13 @@ def Comparison(lattice,V):
         DP = twoDdisorderpotential(m,n,lc,pos)
 
     # Import and Run the simple solver module
-    from DD_SS import TB_ss                                 # Solver module
+    from solvers.DD_SS import TB_ss                                 # Solver module
     FH = FTBH(DP,n,m,dt,V)
 
     wvf_ss = TB_ss(n, m, pos, wfc, FH, T, dt)
 
     # Import and Run the full (fast) solver module
-    from DD_TB_S import TB_solver_S                         # Solver module
+    from solvers.DD_TB_S import TB_solver_S                         # Solver module
     H = TBH(DP,n,m,dt,V)
 
     wvf_S = TB_solver_S(n,m,pos,wfc,H,T,dt,False)
