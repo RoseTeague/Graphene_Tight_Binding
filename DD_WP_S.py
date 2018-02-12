@@ -4,11 +4,22 @@ Module to create a 2-Dimensional Gaussian Wavepacket at t=0
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def Crystal(m, n):
     """
     ============================================================================
     Function to create a square/rectangular crystal
     ============================================================================
+    The square/rectangular crystal crystal that is created here is the same as in 
+    Refs. 1 and 2. There are armchairs in the x direction and zig zags in the y direction. 
+    Each carbon atom has a unique label {n,m}, where n refers to the row number and
+    m to the column number.
+
+    The coordinates of each carbon atom are created in sets of columns, since
+    there is an intrinsic regularity that can be exploited in vector form.
+
+    In later calculations, we require a vector form of all the coordinates. This
+    vector is arrange as a column vector composed of each column of carbon atoms.
 
     Inputs
     -----------
@@ -76,6 +87,8 @@ def Psi(s, kx, ky, m, n,pos):
     ===========================================================================
     Creation of a 2D Gaussian wavepacket
     ===========================================================================
+    Initial Gaussian wave packet distributed on the sites of each carbon atom.
+
 
     Inputs
     -----------
