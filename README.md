@@ -1,8 +1,6 @@
 # Tight Binding Solver
 #### Version 1.0  -   13/02/2018
 
-AUTHORS CONTACT INFO
-
 
 A Tight binding solver to study the evolution of Gaussian wavepackets in 2D lattices.
 Uses a split Hamiltonian approach to produce fast results and is capable of creating
