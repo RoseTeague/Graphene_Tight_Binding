@@ -25,7 +25,12 @@ necessary for producing the video files.
 pip install opencv-python
 ```
 
-You will also need to create an empty folder called Images into your work directory
+You will also need to create an empty folder called Images into your work directory.
+
+Finally, to make your code executable, run the following command:
+```ruby
+chmod +x DD_Main.py
+```
 
 ## 2. Split Operator Method
 
