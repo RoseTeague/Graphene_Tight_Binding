@@ -32,8 +32,7 @@ You will also need to create an empty folder called Images into your work direct
 The method used to solve for the time evolution of a wavepacket in this program
 is the Split Operator Method. In this approach, the system is described at each
 lattice site of the crystal to create a 'mesh' of atoms, as shown in the image
-below ("Wave packet dynamics and valley filter in strained graphene", A.Chaves
-et. al, Phys. Rev. B 82, 205430 (2010)).
+below, taken from [Wave packet dynamics and valley filter in strained graphene](https://arxiv.org/abs/1105.1125v1).
 
 ![Alt Text](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/GrapheneGrid.png)
 
@@ -131,7 +130,7 @@ Operator Approach.
 
 #### Full Hamiltonian
 Describes the complete tight binding hamiltonian as a sparse matrix. Full
-details can be found in the doc strings of DD_FH_G and DD_FH_S.
+details can be found in the doc strings of [DD_FH_G](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py) and [DD_FH_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py).
 
 *Inputs*
 
@@ -147,7 +146,7 @@ details can be found in the doc strings of DD_FH_G and DD_FH_S.
 
 #### Split Operator Hamiltonian
 Describes the complete tight binding hamiltonian as two tri-diagonal matrices.
-Full details can be found in the doc strings of DD_SH and DD_GH.
+Full details can be found in the doc strings of [DD_SH](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py) and [DD_GH](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py).
 
 *Inputs*
 * DP - disorder potential
@@ -167,8 +166,8 @@ Full details can be found in the doc strings of DD_SH and DD_GH.
         Negative version in the linear equation.
 
 ## 4. Solvers
-The modules to solve for the time propagation are described in DD_SS for the
-simple solver, and in DD_TB_S for the split operator solver. As the time
+The modules to solve for the time propagation are described in [DD_SS](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_SS.py) for the
+simple solver, and in [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py) for the split operator solver. As the time
 evolution of the wavepacket is contained within an exponential term involving
 the Hamiltonian, it must be expanded in the Cayley form to solve as an
 eigenvalue problem.
@@ -176,13 +175,12 @@ eigenvalue problem.
 ### Simple solver
 This module takes as an input the single, full hamiltonian and takes the dot
 product with the wavefunction to find the updated wavefunction at each time step.
-More details are given in the doc string for DD_SS
+More details are given in the doc string for [DD_SS](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_SS.py)
 
 ### Split Operator Solver
 This module takes all 4 matrices created in the Split Operator Hamiltonian
 modules. The method for solving this at each time step is outlined in
-*"Wave packet dynamics and valley filter in strained graphene", A.Chaves
-et. al, Phys. Rev. B 82, 205430 (2010)*. In essence, writing the full
+[Wave packet dynamics and valley filter in strained graphene](https://arxiv.org/abs/1105.1125v1). In essence, writing the full
 hamiltonian as a sum allows the exponential to be factorised into 3 terms; the
 first and last depend on the vertical hopping, while the central term depends on
 the lateral hopping. Each exponential can then be written in Cayley form and
