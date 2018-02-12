@@ -8,14 +8,14 @@ Uses a split Hamiltonian approach to produce fast results and is capable of crea
 
 ## 1. Setup
 
-This script is written in python 3 and uses only pre-installed modules
-**(numpy, matplotlib, scipy)**
+This script is written in python 3 and uses pre-installed modules
+(numpy, matplotlib, scipy) and the cv2 module, installation instruction below. 
 
 All modules for the **crystal structure**, **initial wavepacket**,
 **Tight Binding Hamiltonian**, and **solvers** have been included for
 **square (S)** and **hexagonal (G)** lattices. Additionally, an **animate.py**
 file in included to produce .mp4 files and, most importantly, the **DD_Main.py**
-file, which should be the only file you need to modify for simulate different
+file, which will be the only file you need to modify to simulate different
 systems.
 
 Once you have downlaoded these, install cv2 using the command below which will be
