@@ -1,14 +1,24 @@
 """
-Module to create a 2-Dimensional Gaussian Wavepacket at t=0
+Module to create a 2-Dimensional Gaussian Wavepacket
 """
 import numpy as np
 import matplotlib.pyplot as plt
 
-def Crystal(m, n):
+
+def Crystal(m=10, n=10):
     """
     ============================================================================
-    Function to create a square/rectangular crystal
+                    Function to create a square/rectangular crystal
     ============================================================================
+    The square/rectangular crystal crystal that is created here has armchairs
+    in the x direction and zig zags in the y direction. Each carbon atom has a 
+    unique label {n,m}, where n refers to the row number and m to the column number.
+
+    The coordinates of each carbon atom are created in sets of columns, since
+    there is an intrinsic regularity that can be exploited in vector form.
+
+    In later calculations, we require a vector form of all the coordinates. This
+    vector is arrange as a column vector composed of each column of carbon atoms.
 
     Inputs
     -----------
@@ -25,10 +35,16 @@ def Crystal(m, n):
 
     Returns
     ----------
-    X,
-    Y,
-    X_0,
-    Y_0
+    X - arrary (n*m,1),
+        vector with all of the x positions
+        
+    Y - arrary (n*m,1),
+        vector with all of the y positions
+    X_0  - float,
+        initial x position for gaussian wave packet
+        
+    Y_0 - float,
+        initial y position for gaussian wave packet
 
     """
 
@@ -74,8 +90,12 @@ def Crystal(m, n):
 def Psi(s, kx, ky, m, n,pos):
     """
     ===========================================================================
-    Creation of a 2D Gaussian wavepacket
+                    Creation of a 2D Gaussian wavepacket
     ===========================================================================
+    Initial Gaussian wave packet distributed on the sites of each carbon atom.
+    
+    Takes the positions from Crystal and caculations the wavefunction on each
+    atom.
 
     Inputs
     -----------
@@ -99,9 +119,8 @@ def Psi(s, kx, ky, m, n,pos):
 
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
-    #also need to assert that the other numbers are real ...
 
-    #calling Crystal function to import all of the positions of atoms and
+    #Calling Crystal function to import all of the positions of atoms and
     #the initial wave packet position
     X, Y, X_0, Y_0 = pos
 
@@ -114,10 +133,18 @@ def Psi(s, kx, ky, m, n,pos):
     return Psi
 
 if __name__ == "__main__":
-    pos = Crystal(100,100)
-    Psi = Psi(14, 0.1, 0.1, 100, 100, pos)
+    n = 100
+    m = 100
+    kx = 1
+    ky = 1
+    s = 2
+
+    
+    pos = Crystal(n,m)
+    Psi = Psi(s, kx, ky, m, n, pos)
     X,Y,X0,Y0 = pos
     pd = np.abs(Psi)**2
+    
     plt.contourf(X.reshape((100,100)),Y.reshape((100,100)),pd.reshape((100,100)),100, cmap = 'gnuplot')
     plt.plot(X,Y,'bo',markersize = 0.2)
     plt.plot(X0,Y0,'ro',markersize = 0.2)
