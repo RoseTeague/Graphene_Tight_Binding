@@ -121,7 +121,7 @@ at each x-position **or** at each atomic location respectively.
 * Wfinal - value of V at each: x-position
                   **OR**   : atomic location
 
-### Hamiltonian
+### Hamiltonian
 Creates the tight binding Hamiltonian as one or several matrices to be used
 to solve for the wavepacket propagation through the lattice. Included are two
 modules, one for a 'Full Hamiltonian' to be used in conjunction with a simple
