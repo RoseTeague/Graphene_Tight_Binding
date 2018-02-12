@@ -5,7 +5,7 @@ crystals using the Tight Binding Method.
 """
 
 import math
-import mumpy as np
+import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
