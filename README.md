@@ -35,7 +35,7 @@ lattice site of the crystal to create a 'mesh' of atoms, as shown in the image
 below ("Wave packet dynamics and valley filter in strained graphene", A.Chaves
 et. al, Phys. Rev. B 82, 205430 (2010)).
 
-![Alt Text](https://gitlab.com/RoseTeague/Group_Programming_Project/GrapheneGrid.png)
+![Alt Text](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/GrapheneGrid.png)
 
 The Tight Binding Hamiltonian is then constructed as a sparse matrix of on-site
 and hopping elements between these lattice sites. The split operator technique
