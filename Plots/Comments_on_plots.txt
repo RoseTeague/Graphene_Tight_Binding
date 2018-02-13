@@ -1,0 +1,23 @@
+The main plots shown here were run with the following parameters:
+
+n = 200
+m = 200
+lc = 1
+s = 5*lc
+kx = pi/(5*lc)
+ky = pi/(5*lc)
+dt = 0.1 e-15
+T = 15 fs
+
+It can be seen that on this length scale, the 'simple' solver does not 
+reproduce the expected results, however, the 'fast' solver, which is used for 
+the rest of the plots, displays a propagating wave will disperse around the 
+direction of propagation. This is determined by the values of kx and ky. In this, 
+and all other plots unless specified, kx = ky, and so the packet propagates at 45
+degrees. 
+Under a 1D disorder potential, the dispersion is seen to change. The wavepacket 
+develops a tail which streams along the x-direction only, as predicted in 
+literature, however, it still displays travel in the y-direction. This 
+discrepancy is likely due to a bug within the potential which, unfortunately, 
+is still to be identified. 
+Under a 2D disorder potential, the wavepacket spreads out and becomes messy.
