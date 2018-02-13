@@ -73,7 +73,7 @@ def disorder_potential(lattice, V):
     # System parameters: can be modified
     n = 10                                  # Number of atoms along x
     m = 10                                  # Number of atoms along x
-    lc = 10                                 # Correlation length for disorder potential
+    lc = 10                                 # Correlation length for disorder potential in Angstroms
 
     if lattice == 'square':
         # Import system modules for Square lattice
@@ -139,8 +139,8 @@ def hamiltonians (lattice, V, form):
     # System parameters: can be modified
     n = 4                                  # Number of atoms along x
     m = 4                                  # Number of atoms along y
-    lc = 5                                 # Correlation length for disorder potential
-    dt = 0.1e-15                           # Time step in fs
+    lc = 5                                 # Correlation length for disorder potential in Angstroms
+    dt = 0.1e-15                           # Time step in seconds
 
     if lattice == 'square':
         # Import system modules for Square lattice
@@ -220,8 +220,8 @@ def wavepackets(lattice):
     n = 100                     # Number of atoms along y
     lc = 1                      # Correlation length for disorder potential in Angstroms
     s = 5*lc                    # Width of initial Gaussian wavepacket in Angstroms
-    kx = 1/(5*lc)         # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
-    ky = 1/(5*lc)         # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
+    kx = 1/(5*lc)               # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
+    ky = 1/(5*lc)               # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
 
     if lattice == 'square':
         # Import system modules for Square lattice

@@ -64,7 +64,7 @@ def Comparison(lattice,V):
     ---------
     lattice - string
             - description of the lattice to be modelled. This can be either
-                'square', 'graphene', or '1D square'.
+                'square' or 'graphene'
 
     V       - string
             - description of the potential to be used on the system. This can be
@@ -83,13 +83,13 @@ def Comparison(lattice,V):
     # System parameters
     m = 100                         # Number of atoms along x
     n = 100                         # Number of atoms along y
-    lc = 1                          # Correlation length of disorder potential
-    s = 5*lc                        # Width of initial gaussian packet
-    kx = math.pi/(5*lc)             # Momentum eigenvalue (wavenumber) along x
-    ky = math.pi/(5*lc)             # Momentum eigenvalue (wavenumber) along y
-    dt = 0.1e-15                    # Time interval to be sampled
-    T = 0.1e-15                     # Total time of wavepacket propagation
-    Ns = round(T/dt) + 1            # Integer number of time steps
+    lc = 1                          # Correlation length of disorder potential in Angstroms
+    s = 5*lc                        # Width of initial gaussian packet in Angstroms
+    kx = math.pi/(5*lc)             # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
+    ky = math.pi/(5*lc)             # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
+    dt = 0.1e-15                    # Time step in seconds
+    T = 0.1e-15                     # Total time of wavepacket propagation in seconds
+    Ns = round(T/dt) + 1            # Integer number of time steps plus one
 
     if lattice == 'square':
         # Import modules for square lattice
@@ -131,7 +131,7 @@ def Comparison(lattice,V):
 
     wvf_ss = TB_ss(n, m, pos, wfc, FH, T, dt)
 
-    # Import and Run the full (FAST) solver module
+    # Import and Run the full (FAST!!!) solver module
     from solvers.DD_TB_S import TB_solver_S                                     # Solver module
     H = TBH(DP,n,m,dt,V)
 

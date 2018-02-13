@@ -19,7 +19,7 @@ mpl.use('pgf')
 def figsize(scale):
     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
     inches_per_pt = 1.0/72.27                       # Convert pt to inch
-    golden_mean = (np.sqrt(5.0)-1)/2.0            # Aesthetic ratio (you could change this)
+    golden_mean = (np.sqrt(5.0)-1)/2.0              # Aesthetic ratio (you could change this)
     fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
     fig_height = fig_width*golden_mean              # height in inches
     fig_size = [fig_width,fig_height]
@@ -37,7 +37,7 @@ pgf_with_latex = {                      # setup matplotlib to use latex for outp
     "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
     "xtick.labelsize": 8,
     "ytick.labelsize": 8,
-    "figure.figsize": figsize(1),     # default fig size of 0.9 textwidth
+    "figure.figsize": figsize(1),       # default fig size of 0.9 textwidth
     "pgf.preamble": [
         r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
         r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
@@ -51,7 +51,7 @@ mpl.rcParams.update(pgf_with_latex)
 def TB(lattice,V,animate=True):
     """
     ===========================================================================
-              Main file for the split operator tight binding solver
+               Main file for the split operator tight binding solver
     ===========================================================================
 
     This function collects all modules which define the lattice, the initial
@@ -96,12 +96,12 @@ def TB(lattice,V,animate=True):
     s = 5*lc                    # Width of initial Gaussian wavepacket in Angstroms
     kx = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
     ky = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
-    dt = 0.1e-15                # Time step in fs
-    T = 5e-15                   # Total time of wavepacket propagation in fs
+    dt = 0.1e-15                # Time step in seconds
+    T = 5e-15                   # Total time of wavepacket propagation in seconds
     Ns = round(T/dt) + 1        # Integer number of time steps
 
 
-    # Import the full (FAST) Hamiltonian solver
+    # Import the full (FAST!!!) Hamiltonian solver
     from solvers.DD_TB_S import TB_solver_S                                     # Solver module
 
     if lattice == 'square':
@@ -164,7 +164,7 @@ def TB(lattice,V,animate=True):
 def TBS(lattice,V, animate = False):
     """
     ===========================================================================
-           Main file for the simple split operator tight binding solver
+         Main file for the time propagation operator tight binding solver
     ===========================================================================
 
     This function collects all modules which define the lattice, the initial
@@ -187,7 +187,7 @@ def TBS(lattice,V, animate = False):
     V       - string
             - description of the potential to be used on the system. This can be
                 either 'None', 'one dimensional' or 'two dimensional'.
-                If the lattice is '1D square', the potential MUST be 'None'
+                If the lattice is '1D', the potential MUST be 'None'
 
     animate - boolean
             - Determines whether or not a .mp4 file of the propagation will be
@@ -211,8 +211,8 @@ def TBS(lattice,V, animate = False):
     s = 5*lc                    # Width of initial Gaussian wavepacket in Angstroms
     kx = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
     ky = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
-    dt = 0.1e-15                # Time step in fs
-    T = 4e-15                   # Total time of wavepacket propagation in fs
+    dt = 0.1e-15                # Time step in seconds
+    T = 4e-15                   # Total time of wavepacket propagation in seconds
     Ns = round(T/dt) + 1        # Integer number of time steps
 
 
@@ -235,7 +235,7 @@ def TBS(lattice,V, animate = False):
         from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
         from hamiltonians.DD_FH_G import FTBH                                   # Hamiltonian module
 
-    if lattice == '1D square':
+    if lattice == '1D':
         # Import modules for 1D square lattice
         # Must have no potential for this 1D solver
         from other.DD_1D import Crystal                                         # Crystal Module
