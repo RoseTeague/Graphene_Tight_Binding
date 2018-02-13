@@ -1,0 +1,17 @@
+The following graphs were produced using the parameters below: 
+
+n = 500
+m = 500
+lc = 1
+s = 5*lc 
+kx =
+ky = 0
+dt = 0.1 e-15 
+T = 10 e-15 
+
+The disorder strength was kept fixed at delta = 0.3
+The x-direction wavevector was decreased from kx = pi/lc to pi/(10*lc). 
+From the plots it can be seen that setting the y-direction wavevector to zero 
+reduced the and dispersion along the y-diection. As the value of kx increases,
+however, there is seen to be slightly more vertical dispersion than at very 
+small values of kx.
