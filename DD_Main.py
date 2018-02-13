@@ -9,7 +9,6 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-
 #Defining the plotting stuff ... this was taken from the following websites. It just puts figures in a nice LaTeX format.
 
 #http://bkanuka.com/articles/native-latex-plots/
@@ -49,11 +48,10 @@ mpl.rcParams.update(pgf_with_latex)
 #End of plotting stuff
 
 
-# Describe system for use in image/video titles
-def TB(lattice,V,animate=False):
+def TB(lattice,V,animate=True):
     """
     ===========================================================================
-    Main file for the split operator tight binding solver
+              Main file for the split operator tight binding solver
     ===========================================================================
 
     This function collects all modules which define the lattice, the initial
@@ -88,44 +86,40 @@ def TB(lattice,V,animate=False):
 
     If 'animate' is set to be true, an .mp4 file will be saved.
     A plot of the final state of the wavepacket will be displayed as a contour
-        plot where the colour represents the amplitude.
+    plot where the colour represents the amplitude.
     """
 
     # System parameters: can be modified
     m = 500                     # Number of atoms along x
     n = 500                     # Number of atoms along y
-    lc = 1                      # Correlation length for disorder potential
-    s = 5*lc                    # Width of initial Gaussian wavepacket
-    kx = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x
-    ky = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x
-    dt = 0.1e-15                # Time interval to be sampled
-    T = 5e-15                   # Total time of wavepacket propagation
+    lc = 1                      # Correlation length for disorder potential in Angstroms
+    s = 5*lc                    # Width of initial Gaussian wavepacket in Angstroms
+    kx = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
+    ky = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
+    dt = 0.1e-15                # Time step in fs
+    T = 5e-15                   # Total time of wavepacket propagation in fs
     Ns = round(T/dt) + 1        # Integer number of time steps
 
 
-    # Import the full (fast) Hamiltonian solver
-    from solvers.DD_TB_S import TB_solver_S                         # Solver module
+    # Import the full (FAST) Hamiltonian solver
+    from solvers.DD_TB_S import TB_solver_S                                     # Solver module
 
     if lattice == 'square':
         # Import system modules for Square lattice
-        from wavepackets.DD_WP_S import Crystal                         # Wavefunction module
-        from wavepackets.DD_WP_S import Psi                             # Wavefunction module
+        from wavepackets.DD_WP_S import Crystal                                 # Wavefunction module
+        from wavepackets.DD_WP_S import Psi                                     # Wavefunction module
         from disorder_potentials.DD_DP_S import oneDdisorderpotential           # Potential module
         from disorder_potentials.DD_DP_S2 import twoDdisorderpotential          # Potential module
-        from hamiltonians.DD_SH import TBH                               # Hamiltonian module
-
+        from hamiltonians.DD_SH import TBH                                      # Hamiltonian module
 
     if lattice == 'graphene':
         # Import system modules for Graphene (hexagonal) lattice
-        from wavepackets.DD_WP_G import Crystal                         # Wavefunction module
-        from wavepackets.DD_WP_G import Psi                             # Wavefunction module
+        from wavepackets.DD_WP_G import Crystal                                 # Wavefunction module
+        from wavepackets.DD_WP_G import Psi                                     # Wavefunction module
         from disorder_potentials.DD_DP_G import oneDdisorderpotential           # Potential module
         from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
-        from hamiltonians.DD_GH import TBH                               # Hamiltonian module
+        from hamiltonians.DD_GH import TBH                                      # Hamiltonian module
 
-
-
-        #Need to have some assert statements here ...
 
     # Run the system modules to descibe the lattice and initial wavepacket
     pos = Crystal(n,m)
@@ -147,16 +141,19 @@ def TB(lattice,V,animate=False):
     H = TBH(DP,n,m,dt,V)
 
     if animate:
-    # Solves the tight binding hamiltonian using a split operator method
-    # described in the file DD_TB_S. Records an image after each time step and
-    # compiles into an mp4 movie file.
+
+        # Solves the tight binding hamiltonian using a split operator method
+        # described in the file DD_TB_S. Records an image after each time step and
+        # compiles into an mp4 movie file.
         from animate import MakeMovie
 
         pd = TB_solver_S(n,m,pos,wfc,H,T,dt,animate)
         MakeMovie('Tight Binding in ' + lattice + ' with ' + V + ' potential')
+
     else:
-    # Solves the tight binding hamiltonian using a split operator method
-    # describes in the file DD_TB_S
+
+        # Solves the tight binding hamiltonian using a split operator method
+        # describes in the file DD_TB_S
         pd = TB_solver_S(n,m,pos,wfc,H,T,dt,animate)
 
     #Plotting
@@ -167,7 +164,7 @@ def TB(lattice,V,animate=False):
 def TBS(lattice,V, animate = False):
     """
     ===========================================================================
-    Main file for the simple split operator tight binding solver
+           Main file for the simple split operator tight binding solver
     ===========================================================================
 
     This function collects all modules which define the lattice, the initial
@@ -203,49 +200,48 @@ def TBS(lattice,V, animate = False):
 
     If 'animate' is set to be true, an .mp4 file will be saved.
     A plot of the final state of the wavepacket will be displayed as a contour
-        plot where the colour represents the amplitude.
+    plot where the colour represents the amplitude.
+
     """
 
     # System Parameters
     m = 100                     # Number of atoms along x
     n = 100                     # Number of atoms along y
-    lc = 2                      # Correlation length for disorder potential
-    s = 5*lc                    # Width of initial Gaussian wavepacket
-    kx = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x
-    ky = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x
-    dt = 0.1e-15                # Time interval to be sampled
-    T = 4e-15                   # Total time of wavepacket propagation
+    lc = 2                      # Correlation length for disorder potential in Angstroms
+    s = 5*lc                    # Width of initial Gaussian wavepacket in Angstroms
+    kx = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along x in reciprocal Angstroms
+    ky = math.pi/(5*lc)         # Momentum eigenvalue (wavenumber) along y in reciprocal Angstroms
+    dt = 0.1e-15                # Time step in fs
+    T = 4e-15                   # Total time of wavepacket propagation in fs
     Ns = round(T/dt) + 1        # Integer number of time steps
 
 
     # Import the simple Hamiltonian solver
-    from solvers.DD_SS import TB_ss                                 # Solver module
-
+    from solvers.DD_SS import TB_ss                                             # Solver module
 
     if lattice == 'square':
         # Import modules for Square lattice
-        from wavepackets.DD_WP_S import Crystal                         # Wavefunction module
-        from wavepackets.DD_WP_S import Psi                             # Wavefunction module
+        from wavepackets.DD_WP_S import Crystal                                 # Wavefunction module
+        from wavepackets.DD_WP_S import Psi                                     # Wavefunction module
         from disorder_potentials.DD_DP_S import oneDdisorderpotential           # Potential module
         from disorder_potentials.DD_DP_S2 import twoDdisorderpotential          # Potential module
-        from hamiltonians.DD_FH_S import FTBH                            # Hamiltonian module
+        from hamiltonians.DD_FH_S import FTBH                                   # Hamiltonian module
 
     if lattice == 'graphene':
         # Import modules for Graphene lattice
-        from wavepackets.DD_WP_G import Crystal                         # Wavefunction module
-        from wavepackets.DD_WP_G import Psi                             # Wavefunction module
+        from wavepackets.DD_WP_G import Crystal                                 # Wavefunction module
+        from wavepackets.DD_WP_G import Psi                                     # Wavefunction module
         from disorder_potentials.DD_DP_G import oneDdisorderpotential           # Potential module
         from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
-        from hamiltonians.DD_FH_G import FTBH                            # Hamiltonian module
+        from hamiltonians.DD_FH_G import FTBH                                   # Hamiltonian module
 
     if lattice == '1D square':
         # Import modules for 1D square lattice
         # Must have no potential for this 1D solver
-        from other.DD_1D_modified import Crystal                  # Crystal Module
-        from other.DD_1D_modified import Psi                      # Wavefunction Module
-        from other.DD_1D_modified import TBH                      # Hamiltonian Module
-        from other.DD_1D_modified import TB_ss                    # Solver Module
-
+        from other.DD_1D import Crystal                                         # Crystal Module
+        from other.DD_1D import Psi                                             # Wavefunction Module
+        from other.DD_1D import FTBH                                            # Hamiltonian Module
+        from other.DD_1D import TB_ss                                           # Solver Module
 
     # Run the system modules to descibe the lattice and initial wavepacket
     pos = Crystal(n,m)
@@ -267,19 +263,20 @@ def TBS(lattice,V, animate = False):
     FH = FTBH(DP,n,m,dt,V)
 
     if animate:
-    # Solves the tight binding hamiltonian using a split operator method
-    # described in the file DD_TB_S. Records an image after each time step and
-    # compiles into an mp4 movie file.
+
+        # Solves the tight binding hamiltonian using time propogation operator.
+        # Records an image after each time step and compiles into an mp4 movie file.
         from animate import MakeMovie
 
         pd = TB_ss(n,m,pos,wfc,FH,T,dt,animate)
         MakeMovie('Tight Binding in ' + lattice + ' with ' + V + ' potential')
+
     else:
-    # Solves the tight binding hamiltonian using a split operator method
-    # described in the file DD_TB_S.
-    # why does the solver take the DP argument?
+
+        # Solves the tight binding hamiltonian using time propogation operator
         pd = TB_ss(n,m,pos,wfc,FH,T,dt)
 
+    #Plotting
     plt.contourf(pos[0].reshape((n,m)),pos[1].reshape((n,m)), pd, 100, cmap = 'gnuplot')
     plt.title('n='+str(n)+' m='+str(m)+' t='+str(Ns*0.1)+'fs')
     plt.show()

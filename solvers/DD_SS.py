@@ -34,7 +34,7 @@ def TB_ss(n, m, pos, wfc, H, T, dt,video=False):
     pos - array (n*m,1),
         positions of all atoms for plotting
 
-    wvf - arrary (n*m,1),
+    wfc - arrary (n*m,1),
         wavefunction at each atom
 
     H - four arrays from DD_GH or DD_SH,

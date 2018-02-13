@@ -135,7 +135,7 @@ Operator Approach.
 
 #### Full Hamiltonian
 Describes the complete tight binding hamiltonian as a sparse matrix. Full
-details can be found in the doc strings of [DD_FH_G](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py) and [DD_FH_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py).
+details can be found in the doc strings of [DD_FH_G](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/hamiltonians/DD_FH_G.py) and [DD_FH_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/hamiltonians/DD_FH_S.py).
 
 *Inputs*
 
@@ -151,7 +151,7 @@ details can be found in the doc strings of [DD_FH_G](https://gitlab.com/RoseTeag
 
 #### Split Operator Hamiltonian
 Describes the complete tight binding hamiltonian as two tri-diagonal matrices.
-Full details can be found in the doc strings of [DD_SH](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py) and [DD_GH](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py).
+Full details can be found in the doc strings of [DD_SH](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/hamiltonians/DD_SH.py) and [DD_GH](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/hamiltonians/DD_GH.py).
 
 *Inputs*
 * DP - disorder potential
@@ -171,8 +171,8 @@ Full details can be found in the doc strings of [DD_SH](https://gitlab.com/RoseT
         Negative version in the linear equation.
 
 ## 4. Solvers
-The modules to solve for the time propagation are described in [DD_SS](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_SS.py) for the
-simple solver, and in [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py) for the split operator solver. As the time
+The modules to solve for the time propagation are described in [DD_SS](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/solvers/DD_SS.py) for the
+simple solver, and in [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/solvers/DD_TB_S.py) for the split operator solver. As the time
 evolution of the wavepacket is contained within an exponential term involving
 the Hamiltonian, it must be expanded in the Cayley form to solve as an
 eigenvalue problem.
@@ -180,7 +180,7 @@ eigenvalue problem.
 ### Simple solver
 This module takes as an input the single, full hamiltonian and takes the dot
 product with the wavefunction to find the updated wavefunction at each time step.
-More details are given in the doc string for [DD_SS](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_SS.py)
+More details are given in the doc string for [DD_SS](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/solvers/DD_SS.py)
 
 ### Split Operator Solver
 This module takes all 4 matrices created in the Split Operator Hamiltonian
@@ -190,7 +190,7 @@ hamiltonian as a sum allows the exponential to be factorised into 3 terms; the
 first and last depend on the vertical hopping, while the central term depends on
 the lateral hopping. Each exponential can then be written in Cayley form and
 solved as an eigenvalue problem. This requires a certain amount of restructuring
-of the matrices which is described in more detail in the doc string of [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/DD_TB_S.py).
+of the matrices which is described in more detail in the doc string of [DD_TB_S](https://gitlab.com/RoseTeague/Group_Programming_Project/blob/master/solvers/DD_TB_S.py).
 
 This equation is solved for each time step, updating the input wavefunction each
 time until the final form is obtained.

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 Module for comparing the two different solvers
 """
@@ -19,7 +18,7 @@ mpl.use('pgf')
 def figsize(scale):
     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
     inches_per_pt = 1.0/72.27                       # Convert pt to inch
-    golden_mean = (np.sqrt(5.0)-1)/2.0            # Aesthetic ratio (you could change this)
+    golden_mean = (np.sqrt(5.0)-1)/2.0              # Aesthetic ratio (you could change this)
     fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
     fig_height = fig_width*golden_mean              # height in inches
     fig_size = [fig_width,fig_height]
@@ -37,7 +36,7 @@ pgf_with_latex = {                      # setup matplotlib to use latex for outp
     "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
     "xtick.labelsize": 8,
     "ytick.labelsize": 8,
-    "figure.figsize": figsize(1),     # default fig size of 0.9 textwidth
+    "figure.figsize": figsize(1),       # default fig size of 0.9 textwidth
     "pgf.preamble": [
         r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
         r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
@@ -51,14 +50,14 @@ mpl.rcParams.update(pgf_with_latex)
 def Comparison(lattice,V):
     """
     ==========================================================================
-    Comparison of simple and fast solvers
+                    Comparison of Simple and Fast Solvers
     ==========================================================================
 
     This function calculates the difference in the final wavefunctions when
-    either the simple solver or the fast solver are used to propagate the
-    wavepacket. This is used to validate the different approaches.
+    either the simple solver (DD_SS.py) or the fast solver (DD_TB_S.py) are
+    used to propagate the wavepacket. This is used to validate the fast approach.
 
-    The system parameters on lines ___ to __ can be modified to change the
+    The system parameters on lines __ to __: can be modified to change the
     conditions on the system.
 
     Inputs
@@ -89,26 +88,26 @@ def Comparison(lattice,V):
     kx = math.pi/(5*lc)             # Momentum eigenvalue (wavenumber) along x
     ky = math.pi/(5*lc)             # Momentum eigenvalue (wavenumber) along y
     dt = 0.1e-15                    # Time interval to be sampled
-    T = 0#0.1e-15                   # Total time of wavepacket propagation
+    T = 0.1e-15                     # Total time of wavepacket propagation
     Ns = round(T/dt) + 1            # Integer number of time steps
 
     if lattice == 'square':
         # Import modules for square lattice
-        from wavepackets.DD_WP_S import Crystal                         # Wavefunction module
-        from wavepackets.DD_WP_S import Psi                             # Wavefunction module
+        from wavepackets.DD_WP_S import Crystal                                 # Wavefunction module
+        from wavepackets.DD_WP_S import Psi                                     # Wavefunction module
         from disorder_potentials.DD_DP_S import oneDdisorderpotential           # Potential module
         from disorder_potentials.DD_DP_S2 import twoDdisorderpotential          # Potential module
-        from hamiltonians.DD_SH import TBH                               # Hamiltonian module
-        from hamiltonians.DD_FH_S import FTBH                            # Hamiltonian module
+        from hamiltonians.DD_SH import TBH                                      # Hamiltonian module
+        from hamiltonians.DD_FH_S import FTBH                                   # Hamiltonian module
 
     if lattice == 'graphene':
         # Import modules for graphene lattice
-        from wavepackets.DD_WP_G import Crystal                         # Wavefunction module
-        from wavepackets.DD_WP_G import Psi                             # Wavefunction module
+        from wavepackets.DD_WP_G import Crystal                                 # Wavefunction module
+        from wavepackets.DD_WP_G import Psi                                     # Wavefunction module
         from disorder_potentials.DD_DP_G import oneDdisorderpotential           # Potential module
         from disorder_potentials.DD_DP_G2 import twoDdisorderpotential          # Potential module
-        from hamiltonians.DD_GH import TBH                               # Hamiltonian module
-        from hamiltonians.DD_FH_G import FTBH                            # Hamiltonian module
+        from hamiltonians.DD_GH import TBH                                      # Hamiltonian module
+        from hamiltonians.DD_FH_G import FTBH                                   # Hamiltonian module
 
     # Run the system modules to descibe the lattice and initial wavepacket
     pos = Crystal(n,m)
@@ -119,7 +118,6 @@ def Comparison(lattice,V):
         # If the system is to be run with no external potential, assign an
         # arbitrary value of 1 to the potential variable.
         DP = 1
-        V = 'no'
 
     if V == 'one dimensional':
         DP = oneDdisorderpotential(m,n,lc,pos)
@@ -127,14 +125,14 @@ def Comparison(lattice,V):
     if V == 'two dimensional':
         DP = twoDdisorderpotential(m,n,lc,pos)
 
-    # Import and Run the simple solver module
-    from solvers.DD_SS import TB_ss                                 # Solver module
+    # Import and Run the simple (VERY SLOW!) solver module
+    from solvers.DD_SS import TB_ss                                             # Solver module
     FH = FTBH(DP,n,m,dt,V)
 
     wvf_ss = TB_ss(n, m, pos, wfc, FH, T, dt)
 
-    # Import and Run the full (fast) solver module
-    from solvers.DD_TB_S import TB_solver_S                         # Solver module
+    # Import and Run the full (FAST) solver module
+    from solvers.DD_TB_S import TB_solver_S                                     # Solver module
     H = TBH(DP,n,m,dt,V)
 
     wvf_S = TB_solver_S(n,m,pos,wfc,H,T,dt,False)
@@ -149,5 +147,4 @@ def Comparison(lattice,V):
     plt.show()
 
 if __name__ == '__main__':
-    #TB('Square', 'None')
     Comparison('square', 'None')
