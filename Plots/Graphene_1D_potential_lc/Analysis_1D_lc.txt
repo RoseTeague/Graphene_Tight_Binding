@@ -1,0 +1,18 @@
+The following graphs were produced using the parameters below: 
+
+n = 500
+m = 500
+lc = 
+s = 5*lc 
+kx = pi/(5*lc)
+ky = pi/(5*lc)
+dt = 0.1 e-15 
+T = 10 e-15 
+The disorder strength was fixed at delta=0.3
+
+The correlation length, lc, was increased from 0.1 - 2.5. From the resulting 
+plots it can be seen that at small values of lc, whilst the initial width of the 
+wavepacket is much smaller, the packet spreads outwards from the origin maintaining 
+the hexagonal structure of the lattice. This is due to the inital wavepacket 
+being smaller than the lattice structure itself. As lc increases, the final 
+wavepacket becomes more linear as expected. 
