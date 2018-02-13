@@ -1,0 +1,18 @@
+The following graphs were produced using the parameters below: 
+
+n = 500
+m = 500
+lc = 1
+s = 5*lc 
+kx = 
+ky = 
+dt = 0.1 e-15 
+T = 10 e-15 
+
+The wavevector was reduced along each direction from pi/lc to pi/(10*lc). In 
+all plots, kx = ky.
+For larger wavevectors (kx = ky = pi/lc) the wavepacket can be seen to interact 
+more with the lattice, resulting in a separation of the final packet. However, 
+as k decreases (representing longer wavelengths which cannot 'see' the lattice 
+structure so much) the intereference fringes disappear and the final wavepacket
+becomes more spherical. 
