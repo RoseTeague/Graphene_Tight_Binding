@@ -1,0 +1,18 @@
+The following graphs were produced using the parameters below: 
+
+n = 500
+m = 500
+lc = 1
+s = 5*lc 
+kx = pi/(5*lc)
+ky = pi/(5*lc)
+dt = 0.1 e-15 
+T = 10 e-15 
+
+The disorder strength was increased from 0.1 to 2.3. The plots show as the 
+2D disorder strength increases, there is more 'resistance' to wavepacket 
+dispersion. For delta = 0.1, the form of the final wavepacket with no 
+potential is clear, with two tails, one to the left and one down, from the 
+central peak. At higher values of delta, these tails become more dominant, and 
+the overall wavepacket recedes towards its initial position. The 2D disorder can 
+therefore be seen to enhance dispersion at the expense of propagation.
