@@ -2,8 +2,8 @@
 """
 Module to initiate a 2-Dimensional Gaussian Wavepacket
 """
+
 import numpy as np
-import matplotlib.pyplot as plt
 
 def Crystal(m=10, n=10):
     """
@@ -127,7 +127,10 @@ def Psi(s, kx, ky, m, n, pos):
 
     n  - integer,
         number of atoms along y
-        
+
+    pos - array,
+        vector of all atomic positions in square lattice
+
     Returns
     -----------
     Psi - array (mxn,1), complex
@@ -148,4 +151,3 @@ def Psi(s, kx, ky, m, n, pos):
     Psi = (np.exp(-0.5*(((X - X_0)/s)**2 + ((Y - Y_0)/s)**2))*np.exp((kx*X + ky*Y)*1j))/np.sqrt(4*np.pi*s)
 
     return Psi
-

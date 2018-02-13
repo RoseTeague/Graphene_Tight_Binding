@@ -11,27 +11,24 @@ def Crystal(m=10, n=10):
     ============================================================================
                     Function to create a square/rectangular crystal
     ============================================================================
-    The square/rectangular crystal crystal that is created here has armchairs
-    in the x direction and zig zags in the y direction. Each carbon atom has a
-    unique label {n,m}, where n refers to the row number and m to the column number.
 
-    The coordinates of each carbon atom are created in sets of columns, since
-    there is an intrinsic regularity that can be exploited in vector form.
+    A square/rectangular lattice. Each atom has a unique label {n,m}, where n
+    refers to the row number and m to the column number.
 
     In later calculations, we require a vector form of all the coordinates. This
-    vector is arrange as a column vector composed of each column of carbon atoms.
+    vector is arrange as a column vector composed of each column of atoms.
 
     Inputs
     -----------
-    m : integer
+    m - integer,
         Number of atoms along the x-direction
 
-    n : integer
+    n - integer,
         Numver of atoms along the y-direction
 
     Parameters
     -----------
-    a : float
+    a - float,
         Lattice size parameter of graphene
 
     Returns
@@ -93,23 +90,27 @@ def Psi(s, kx, ky, m, n,pos):
     ===========================================================================
                     Creation of a 2D Gaussian wavepacket
     ===========================================================================
-    Initial Gaussian wave packet distributed on the sites of each carbon atom.
+    Initial Gaussian wave packet distributed on the sites of each atom.
 
     Takes the positions from Crystal and caculations the wavefunction on each
     atom.
 
     Inputs
     -----------
-    s : float
+    s - float,
         Width of gaussian Wavepacket
-    sigma : float
-        Phase of guassian Wavepacket
-    kx, ky : float
+
+    kx, ky - float,
         wavenumbers along x and y directions
 
-    m  : Number of atoms along x
-    n  : Number of atoms along y
+    m  - int,
+        Number of atoms along x
 
+    n  - int,
+        Number of atoms along y
+
+    pos - array,
+        vector of all atomic positions in square lattice
 
     Returns
     -----------
