@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module for 2 D problem
+"""Module for full tight binfing hamilonian for square lattice 
 """
 
 import numpy as np
@@ -91,4 +91,3 @@ def FTBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
     H = sparse.csr_matrix(np.diag(H_d, 0) + np.diag(H_rd, -n) + np.diag(H_rd, n) + np.diag(H_cd, -1) + np.diag(H_cd, 1))
 
     return H
-

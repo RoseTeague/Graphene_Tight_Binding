@@ -5,7 +5,7 @@
 import numpy as np
 from scipy import constants
 
-def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
+def TBH(DP,n,m,dt,V='None'):
     """
     ============================================================================
           Tight Binding Hamiltonian of Square Lattice in Tridiagonal Form
@@ -34,6 +34,9 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V=False):
 
     Inputs
     ------
+    DP - array,
+        disorder potential imported from module
+
     n - int,
         number of rows of carbon atoms
 

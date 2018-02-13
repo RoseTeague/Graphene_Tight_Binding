@@ -5,7 +5,7 @@
 import numpy as np
 from scipy import constants
 
-def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
+def TBH(DP,n,m,dt,V='None'):
     """
     ============================================================================
             Tight Binding Hamiltonian of Graphene in Tridiagonal Form
@@ -42,6 +42,9 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
 
     Inputs
     ------
+    DP - array,
+        disorder potential imported from module
+
     n - int,
         number of rows of carbon atoms
 
@@ -147,7 +150,6 @@ def TBH(DP,n=10,m=10,dt=0.1e-15,V='no'):
         TH2N[1] = 1
 
     #Setting off-diagonal elements of m matrix
-
     #Counters for initial and final position for off-diagonal elements
     ip = 1
     fp = m

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module for 1 D problem
+"""Module for full tight binding hamiltonian for graphene
 """
 
 import numpy as np
