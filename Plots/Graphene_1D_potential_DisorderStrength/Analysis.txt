@@ -1,0 +1,17 @@
+The following graphs were produced using the parameters below: 
+
+n = 500
+m = 500
+lc = 1
+s = 5*lc 
+kx = pi/(5*lc)
+ky = pi/(5*lc)
+dt = 0.1 e-15 
+T = 10 e-15 
+
+The disorder strength, given by delta in the file disorder_potentials/DD_DP_G
+was changed between 0.1 and 2.1 in intervals of 0.2. 
+It can be seen that increasing the strength of disorder has the effect of 
+'squashing' the tail. With a disorder strength of 0.1, the wavepacket can clearly
+be identified as the case of no potential with an very small tail towards the 
+left. The intensity of the wavepacket reduces as the disorder strength increases.
