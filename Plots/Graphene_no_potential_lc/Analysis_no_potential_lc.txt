@@ -1,0 +1,19 @@
+The following graphs were produced using the parameters below: 
+
+n = 500
+m = 500
+lc = 
+s = 5*lc 
+kx = pi/(5*lc)
+ky = pi/(5*lc)
+dt = 0.1 e-15 
+T = 10 e-15 
+
+The correlation length was increased from 0.1 to 2.5. In the absence of any 
+potential, the only effect this has is on the width and momentum of the 
+wavepacket in relation to the size of the lattice. For small values of lc where
+the width is less than the lattice size, the packet does not propagate but 
+spreads out through the lattice, maintaining that hexagonal structure. As lc is
+increases, the width of the packet increases and so it begins to propagate more. 
+Where lc = 1.5, there is no longer any dispersion tailing off from the peak, and 
+a much cleaner propagation is seen.
