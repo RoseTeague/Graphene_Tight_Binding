@@ -9,8 +9,9 @@ ky = pi/(5*lc)
 dt = 0.1 e-15
 T = 15 fs
 
-It can be seen that on this length scale, the 'simple' solver does not 
-reproduce the expected results, however, the 'fast' solver, which is used for 
+It can be seen that on this length scale, the 'simple' solver diverges from the 
+expected results due to a numerical error which can be reduced by making the 
+time step, dt, very small. The 'fast' solver, which is used for 
 the rest of the plots, displays a propagating wave will disperse around the 
 direction of propagation. This is determined by the values of kx and ky. In this, 
 and all other plots unless specified, kx = ky, and so the packet propagates at 45
