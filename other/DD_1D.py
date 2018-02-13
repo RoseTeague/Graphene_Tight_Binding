@@ -8,7 +8,7 @@ from scipy import constants
 from scipy import sparse
 from scipy.sparse.linalg import expm_multiply
 
-def Crystal(n=10):
+def Crystal(n,m):
     """
     ============================================================================
                             Function to a 1D crystal
@@ -21,6 +21,8 @@ def Crystal(n=10):
 
     n - integer,
         Number of atoms along the y-direction
+
+    m is a dummy variable here. Inlcuded for convenience in DD_Main.py
 
     Returns
     --------
@@ -54,7 +56,7 @@ def Crystal(n=10):
 
     return X, X_0
 
-def Psi(s, kx, n, pos):
+def Psi(s, kx, ky, n, m, pos):
     """
     ===========================================================================
                         Creation of a 2D Gaussian wavepacket
@@ -75,6 +77,8 @@ def Psi(s, kx, n, pos):
 
     pos - array,
         vector of all atomic positions in square lattice
+
+    ky and m are dummy variables here. They have been included for convenience.
 
     Returns
     -----------
@@ -99,7 +103,7 @@ def Psi(s, kx, n, pos):
 
     return Psi
 
-def TBH(n=10,dt=0.1e-15):
+def FTBH(DP,n,m,dt=0.1e-15,V='no'):
     """
     ============================================================================
                     Full Tight Binding Hamiltonian of 1D Lattice
@@ -119,6 +123,9 @@ def TBH(n=10,dt=0.1e-15):
 
     dt - float or int,
         time step in seconds
+
+    DP, m and V are dummpy inputs here! They are included so the DD_Main module
+    can run without changing the inputs of the functions for different cases.
 
     Parameters
     ----------
@@ -150,7 +157,7 @@ def TBH(n=10,dt=0.1e-15):
 
     return H
 
-def TB_solver_S(n,wfc,H,T,dt,video):
+def TB_ss(DP,n,m,wfc,H,T,dt,video):
     """
     ============================================================================
                 Time Propogation Operator Acting on Wave Packet
@@ -184,6 +191,9 @@ def TB_solver_S(n,wfc,H,T,dt,video):
 
     video - boolean,
         determines if a video is produced
+
+    DP and m are dummpy inputs here! They are included so the DD_Main module
+    can run without changing the inputs of the functions for different cases.
 
     Returns
     -------

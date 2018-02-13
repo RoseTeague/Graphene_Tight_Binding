@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """Module for Tight-Binding Hamiltonian for the graphene with line defects
 """
 
@@ -13,13 +12,22 @@ def linedefect(p,q,m,n,psi,H):
     Inputs
     ------
     p : integer,
-        The index of the column of the line defect
+        index which controls which column of atoms has  defect
+
+    q : integer,
+        index which controls the starting position of the line defect in a column
 
     m : integer,
         Number of atoms along the x-direction
 
     n : integer,
         Number of atoms along the y-direction
+
+    psi : arrary,
+        imported wave packet from module
+
+    H : tuple of arrays,
+        imported matrices for split operator technique
 
     Returns
     -------
@@ -42,9 +50,8 @@ def linedefect(p,q,m,n,psi,H):
 
     assert type(n) is int, "Initial number of rows of carbon atoms must be an integer"
     assert type(m) is int, "Initial number of columns of carbon atoms must be an integer"
-    assert n % 2 == 0, "The Hamiltonian can only be constructed for an even number of rows"
-    assert m % 2 == 0, "The Hamiltonian can only be constructed for an even number of columns"
-    #need to have some assert statements for these guys ... p and q
+    assert type(p) is int, "Index for line defect must be an integer"
+    assert type(q) is int, "Index for line defect must be an integer"
 
     #Generate a new wave-packet with the values of the pth column to be zero.
     psi[p*n + q:(p + 1)*n] = 0
