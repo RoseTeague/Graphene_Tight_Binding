@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def Crystal(m=10, n=10):
+def Crystal(m, n):
     """
     ============================================================================
                     Function to create a square/rectangular crystal
@@ -29,7 +29,10 @@ def Crystal(m=10, n=10):
     Parameters
     -----------
     a - float,
-        Lattice size parameter of graphene
+        Lattice parameter
+
+    b - float,
+        Lattice parameter. By default this is set to a to study a square lattice
 
     Returns
     ----------
@@ -51,7 +54,7 @@ def Crystal(m=10, n=10):
 
     #Lattice parameters in the y and x direction, respectively.
     a = 1.42
-    b = 1.42
+    b = 1.42#Can make rectangular lattice by changing b
 
     #Creating initial arrays for populating the x and y values of each carbon atom.
     X = np.zeros((m,n))
@@ -88,7 +91,7 @@ def Crystal(m=10, n=10):
 def Psi(s, kx, ky, m, n,pos):
     """
     ===========================================================================
-                    Creation of a 2D Gaussian wavepacket
+                        Creation of a 2D Gaussian wavepacket
     ===========================================================================
     Initial Gaussian wave packet distributed on the sites of each atom.
 
